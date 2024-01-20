@@ -58,7 +58,7 @@ class RegisterView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: TextFormField(
-                  key: const Key("password"),
+                  key: const Key("create-password"),
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
                   obscuringCharacter: "*",

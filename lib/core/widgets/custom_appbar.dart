@@ -4,7 +4,7 @@ AppBar customAppbar({
   VoidCallback? onBack
 }) {
   return AppBar(
-    leadingWidth: 100,
+    leadingWidth: 109,
     automaticallyImplyLeading: false,
     leading: onBack == null ? null : InkWell(
       onTap: onBack,
