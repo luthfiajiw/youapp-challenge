@@ -1,19 +1,22 @@
 
 import 'package:flutter/material.dart';
-import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/config/theme/palette.dart';
+import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
 import 'package:youapp_challenge/core/widgets/gradient_background.dart';
 import 'package:youapp_challenge/core/widgets/gradient_button.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        appBar: customAppbar(
+          onBack: () => Navigator.pop(context),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -24,7 +27,7 @@ class LoginView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 24.0, left: 16),
                   child: Text(
-                    "Login",
+                    "Register",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700
@@ -43,14 +46,44 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: TextFormField(
+                  key: const Key('username'),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    hintText: "Crate Username",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
                 child: TextFormField(
                   key: const Key("password"),
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
                   obscuringCharacter: "*",
                   decoration: InputDecoration(
-                    hintText: "Enter Password",
+                    hintText: "Create Password",
+                    suffixIcon: IconButton(
+                      onPressed: () {},
+                      icon: const GradientIcon(
+                        icon: Icon(
+                          Icons.visibility_off_outlined
+                        ),
+                      )
+                    )
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24.0),
+                child: TextFormField(
+                  key: const Key("confirm-password"),
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+                  obscuringCharacter: "*",
+                  decoration: InputDecoration(
+                    hintText: "Confirm Password",
                     suffixIcon: IconButton(
                       onPressed: () {},
                       icon: const GradientIcon(
@@ -63,11 +96,11 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               GradientButton(
-                key: const Key("btn-login"),
+                key: const Key("btn-register"),
                 onTap: () {},
                 padding: const EdgeInsets.all(14),
                 child: const Text(
-                  "Login",
+                  "Register",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -80,14 +113,14 @@ class LoginView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("No account?"),
+                    const Text("Have an account?"),
                     const SizedBox(width: 4,),
                     InkWell(
-                      onTap: () => Navigator.pushNamed(context, RoutePaths.register),
+                      onTap: () => Navigator.pop(context),
                       borderRadius: BorderRadius.circular(4),
                       child: GradientText(
                         text: Text(
-                          "Register here",
+                          "Login here",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.solid,
