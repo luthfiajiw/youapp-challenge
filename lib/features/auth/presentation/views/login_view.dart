@@ -8,7 +8,7 @@ import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/states/auth_state.dart';
+import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -52,7 +52,7 @@ class LoginView extends StatelessWidget {
                       key: const Key("password"),
                       onChanged: (value) => context.read<AuthBloc>().add(AuthPasswordChanged(password: value)),
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: state.showPassword!,
+                      obscureText: !state.showPassword!,
                       obscuringCharacter: "*",
                       decoration: InputDecoration(
                         hintText: "Enter Password",
@@ -74,7 +74,12 @@ class LoginView extends StatelessWidget {
                   ),
                   GradientButton(
                     key: const Key("btn-login"),
-                    onTap: () {},
+                    disabled: state.email == null || state.password == null,
+                    isLoading: state.authStatus == AuthSubmissionStatus.submitting,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      context.read<AuthBloc>().add(LoginSubmitted());
+                    },
                     padding: const EdgeInsets.all(14),
                     child: const Text(
                       "Login",
@@ -95,17 +100,16 @@ class LoginView extends StatelessWidget {
                           width: 4,
                         ),
                         InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, RoutePaths.register),
+                          onTap: () => Navigator.pushNamed(context, RoutePaths.register),
                           borderRadius: BorderRadius.circular(4),
                           child: GradientText(
                             text: Text(
                               "Register here",
                               style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  decorationStyle: TextDecorationStyle.solid,
-                                  decorationColor:
-                                      Palette.golden3.withOpacity(.5)),
+                                decoration: TextDecoration.underline,
+                                decorationStyle: TextDecorationStyle.solid,
+                                decorationColor: Palette.golden3.withOpacity(.5)
+                              ),
                             ),
                           ),
                         )

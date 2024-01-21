@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/states/auth_submission_status.dart';
+
+enum AuthSubmissionStatus {
+  idle, submitting, done, error
+}
 
 class AuthState extends Equatable{
   final String? email;
@@ -11,7 +14,7 @@ class AuthState extends Equatable{
     this.email,
     this.password,
     this.showPassword = false,
-    this.authStatus = const InitialAuthStatus()
+    this.authStatus = AuthSubmissionStatus.idle
   });
 
   AuthState copyWith({
@@ -30,6 +33,6 @@ class AuthState extends Equatable{
   
   @override
   List<Object?> get props => [
-    email, password, authStatus
+    email, password, showPassword, authStatus
   ];
 }

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/states/auth_state.dart';
+import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/login_view.dart';
 
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}

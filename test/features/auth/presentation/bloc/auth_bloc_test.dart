@@ -4,8 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/states/auth_state.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/states/auth_submission_status.dart';
+import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 
 class MockPostLogin extends Mock implements PostLogin {}
 
@@ -23,7 +22,7 @@ void main() {
       expect(authBloc.state.email, isNull);
       expect(authBloc.state.password, isNull);
       expect(authBloc.state.showPassword, false);
-      expect(authBloc.state.authStatus, isA<InitialAuthStatus>());
+      expect(authBloc.state.authStatus, AuthSubmissionStatus.idle);
     });
 
     blocTest<AuthBloc, AuthState>(
