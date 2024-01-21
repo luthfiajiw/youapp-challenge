@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
@@ -18,11 +17,8 @@ void main() {
   });
 
   Widget makeTestableWidget(Widget body) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => mockAuthBloc,
-      child: MaterialApp(
-        home: body,
-      ),
+    return MaterialApp(
+      home: body,
     );
   }
   
@@ -31,7 +27,7 @@ void main() {
       // arrange
       when(() => mockAuthBloc.state,).thenReturn(const AuthState());
       
-      await tester.pumpWidget(makeTestableWidget(const LoginView()));
+      await tester.pumpWidget(makeTestableWidget(LoginView(authBloc: mockAuthBloc,)));
 
       // Finders
       final titleFinder = find.text('Login');
@@ -54,7 +50,7 @@ void main() {
         Stream.fromIterable([const AuthState(), const AuthState(showPassword: true)])
       );
 
-      await tester.pumpWidget(makeTestableWidget(const LoginView()));
+      await tester.pumpWidget(makeTestableWidget(LoginView(authBloc: mockAuthBloc,)));
       
       // finders
       final visibilityBtnFinder = find.byKey(const Key('btn-visibility'));

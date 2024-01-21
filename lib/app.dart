@@ -4,7 +4,7 @@ import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/config/routes/routes.dart';
 import 'package:youapp_challenge/config/theme/dark_theme.dart';
 import 'package:youapp_challenge/core/services/locator_service.dart';
-import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -18,8 +18,8 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(
-          create: (context) => locator.get<AuthBloc>(),
+        BlocProvider<SplashCubit>(
+          create: (context) => locator.get<SplashCubit>(),
         )
       ],
       child: MaterialApp(

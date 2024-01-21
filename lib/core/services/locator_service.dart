@@ -8,6 +8,7 @@ import 'package:youapp_challenge/features/auth/data/sources/remote_auth_source.d
 import 'package:youapp_challenge/features/auth/domain/repositories/auth_repository.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 
 final locator = GetIt.instance;
 
@@ -40,6 +41,11 @@ Future<void> setupDependencies() async {
   locator.registerSingleton<PostLogin>(
     PostLogin(authRepository: locator.get<AuthRepository>())
   );
+
+  // CUBITS
+  locator.registerFactory(() {
+    return SplashCubit(locator.get<SharedPrefsService>());
+  });
 
   // BLOCS
   locator.registerFactory<AuthBloc>(() {
