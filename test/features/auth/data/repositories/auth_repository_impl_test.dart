@@ -57,11 +57,8 @@ void main() {
       final response = await authRepo.postLogin(loginData);
 
       // matcher
-      const expectedModel = AuthResponseEntity(
-        message: "User has been logged in successfully",
-        accessToken: "token"
-      );
       expect(response, isA<DataSuccess<AuthResponseEntity>>());
+      expect(response.data?.accessToken, isNotNull);
     });
 
     test('when login data is invalid should throw an exception', () async {
