@@ -50,7 +50,8 @@ Future<void> setupDependencies() async {
   // BLOCS
   locator.registerFactory<AuthBloc>(() {
     return AuthBloc(
-      locator.get<PostLogin>()
+      locator.get<PostLogin>(),
+      locator.get<SharedPrefsService>(),
     );
   });
 

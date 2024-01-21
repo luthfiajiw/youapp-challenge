@@ -5,7 +5,6 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
-import 'package:youapp_challenge/features/auth/presentation/cubit/splash_state.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/splash_view.dart';
 
 
@@ -41,7 +40,7 @@ void main() {
   group('Splash View', () {
     testWidgets("when accessToken is empty should navigate to LoginView", (tester) async {
       when(mockNavigator.canPop).thenReturn(true);
-      when(() => mockNavigator.pushReplacementNamed(any())).thenAnswer((_) async {});
+      when(() => mockNavigator.pushReplacementNamed(any())).thenAnswer((_) async => null);
 
       await tester.pumpWidget(makeTestableWidget(const SplashView()));
       await tester.pump(const Duration(seconds: 2));

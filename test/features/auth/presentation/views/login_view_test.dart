@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
@@ -10,30 +10,42 @@ import 'package:youapp_challenge/features/auth/presentation/views/login_view.dar
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
 void main() {
+  late MockNavigator mockNavigator;
   late MockAuthBloc mockAuthBloc;
 
   setUp(() {
+    mockNavigator = MockNavigator();
     mockAuthBloc = MockAuthBloc();
+
+    // stub naviagtor
+    when(mockNavigator.canPop).thenReturn(true);
+    when(() => mockNavigator.pushReplacementNamed(any())).thenAnswer((_) async => null);
   });
 
-  Widget makeTestableWidget(Widget body) {
+  Widget loginView() {
     return MaterialApp(
-      home: body,
+      home: MockNavigatorProvider(
+        navigator: mockNavigator,
+        child: LoginView(authBloc: mockAuthBloc,)
+      ),
     );
   }
   
   group("Login View", () {
+    // Finders
+    final btnLoginFinder = find.byKey(const Key('btn-login'));
+    final titleFinder = find.text('Login');
+    final emailTextfieldFinder = find.byKey(const Key('email'));
+    final passwordTextfieldFinder = find.byKey(const Key('password'));
+    final visibilityBtnFinder = find.byKey(const Key('btn-visibility'));
+    final visibilityIconFinder = find.byIcon(Icons.visibility_outlined);
+    final visibilityOffIconFinder = find.byIcon(Icons.visibility_off_outlined);
+
     testWidgets("has 2 textfield and 1 button", (tester) async {
       // arrange
       when(() => mockAuthBloc.state,).thenReturn(const AuthState());
       
-      await tester.pumpWidget(makeTestableWidget(LoginView(authBloc: mockAuthBloc,)));
-
-      // Finders
-      final titleFinder = find.text('Login');
-      final emailTextfieldFinder = find.byKey(const Key('email'));
-      final passwordTextfieldFinder = find.byKey(const Key('password'));
-      final btnLoginFinder = find.byKey(const Key('btn-login'));
+      await tester.pumpWidget(loginView());
 
       expect(titleFinder, findsNWidgets(2));
       expect(emailTextfieldFinder, findsOneWidget);
@@ -50,12 +62,7 @@ void main() {
         Stream.fromIterable([const AuthState(), const AuthState(showPassword: true)])
       );
 
-      await tester.pumpWidget(makeTestableWidget(LoginView(authBloc: mockAuthBloc,)));
-      
-      // finders
-      final visibilityBtnFinder = find.byKey(const Key('btn-visibility'));
-      final visibilityIconFinder = find.byIcon(Icons.visibility_outlined);
-      final visibilityOffIconFinder = find.byIcon(Icons.visibility_off_outlined);
+      await tester.pumpWidget(loginView());
 
       expect(visibilityBtnFinder, findsOneWidget);
       // visibility off
@@ -71,6 +78,30 @@ void main() {
       // visibility on
       expect(visibilityOffIconFinder, findsNothing);
       expect(visibilityIconFinder, findsOneWidget);
+    });
+
+    testWidgets("when AuthSubmissionStatus is done should navigate to UserView", (tester) async {
+      // arrange
+      when(() => mockAuthBloc.state,).thenReturn(const AuthState(email: "email", password: "password"));
+      when(() => mockAuthBloc.add(LoginSubmitted())).thenAnswer((_) async {});
+      whenListen(
+        mockAuthBloc,
+        Stream.fromIterable([
+          const AuthState(email: "email", password: "password"),
+          const AuthState(authStatus: AuthSubmissionStatus.done)
+        ])
+      );
+
+      await tester.pumpWidget(loginView());
+
+      // act
+      await tester.tap(btnLoginFinder);
+
+      // verify event is called
+      verify(() => mockAuthBloc.add(LoginSubmitted())).called(1);
+
+      // verify navigator is called
+      verify(() => mockNavigator.pushReplacementNamed('/user')).called(1);
     });
   });
 }
