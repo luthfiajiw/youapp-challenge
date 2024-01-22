@@ -17,6 +17,16 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
 
   RegisterView({super.key, required this.authBloc});
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  void _onValidateForm(BuildContext context) {
+    if (formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(RegisterSubmitted());
+    } else {
+      context.read<AuthBloc>().add(ConfirmPassAutovalidateChanged(autovalidateMode: AutovalidateMode.always));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -34,7 +44,7 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
             },
             builder: (context, state) {
               return Form(
-                key: state.registerFormKey,
+                key: formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -57,6 +67,7 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: TextFormField(
                           key: const Key('email'),
+                          validator: isEmailValid,
                           keyboardType: TextInputType.emailAddress,
                           onChanged: (value) => context.read<AuthBloc>().add(AuthEmailChanged(email: value)),
                           decoration: const InputDecoration(
@@ -101,6 +112,7 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                         child: TextFormField(
                           key: const Key("confirm-password"),
                           keyboardType: TextInputType.visiblePassword,
+                          autovalidateMode: state.confirmPasswordAutovalidate,
                           obscureText: true,
                           obscuringCharacter: "*",
                           onChanged: (value) => context.read<AuthBloc>().add(AuthConfirmPasswordChanged(password: value)),
@@ -121,7 +133,7 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                       GradientButton(
                         key: const Key("btn-register"),
                         disabled: !isAllFieldFilled([state.email, state.username, state.password, state.confirmPassword]) || (state.password?.length ?? 0) < 8,
-                        onTap: () => context.read<AuthBloc>().add(RegisterSubmitted()),
+                        onTap: () => _onValidateForm(context),
                         padding: const EdgeInsets.all(14),
                         child: const Text(
                           "Register",

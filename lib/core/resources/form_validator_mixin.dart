@@ -15,4 +15,15 @@ mixin FormValidatorMixin {
 
     return true;
   }
+
+  // Validate email
+  String? isEmailValid(String? email) {
+    final emailRegExp = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+    
+    if (emailRegExp.hasMatch(email ?? "")) {
+      return null;
+    }
+
+    return "Email is invalid";
+  }
 }

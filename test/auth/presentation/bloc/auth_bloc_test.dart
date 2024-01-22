@@ -8,14 +8,17 @@ import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/auth_response_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/login_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecase.dart';
+import 'package:youapp_challenge/features/auth/domain/usecases/post_register_usercase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 
 class MockPostLogin extends Mock implements PostLogin {}
+class MockPostRegister extends Mock implements PostRegister {}
 
 void main() {
   late MockPostLogin mockPostLogin;
+  late MockPostRegister mockPostRegister;
   late SharedPrefsService sharedPrefs;
   late AuthBloc authBloc;
 
@@ -26,12 +29,12 @@ void main() {
     sharedPrefs = SharedPrefsService(prefs: prefs);
 
     mockPostLogin = MockPostLogin();
-    authBloc = AuthBloc(mockPostLogin, sharedPrefs);
+    mockPostRegister = MockPostRegister();
+    authBloc = AuthBloc(mockPostLogin, mockPostRegister, sharedPrefs);
   });
 
   group('Auth Bloc', () {
     test('initial state', () {
-      expect(authBloc.state.registerFormKey, isA<GlobalKey<FormState>>());
       expect(authBloc.state.email, isNull);
       expect(authBloc.state.username, isNull);
       expect(authBloc.state.password, isNull);
@@ -39,7 +42,7 @@ void main() {
       expect(authBloc.state.showPassword, false);
       expect(authBloc.state.showConfirmPassword, false);
       expect(authBloc.state.authStatus, AuthSubmissionStatus.idle);
-      expect(authBloc.state.registerAutovalidate, AutovalidateMode.disabled);
+      expect(authBloc.state.confirmPasswordAutovalidate, AutovalidateMode.disabled);
     });
 
     blocTest<AuthBloc, AuthState>(

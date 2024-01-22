@@ -39,10 +39,10 @@ class AuthConfirmPasswordChanged extends AuthEvent {
   List<Object?> get props => [password];
 }
 
-class AuthRegisterAutovalidateChanged extends AuthEvent {
+class ConfirmPassAutovalidateChanged extends AuthEvent {
   final AutovalidateMode autovalidateMode;
 
-  AuthRegisterAutovalidateChanged({required this.autovalidateMode});
+  ConfirmPassAutovalidateChanged({required this.autovalidateMode});
   
   @override
   List<Object?> get props => [autovalidateMode];

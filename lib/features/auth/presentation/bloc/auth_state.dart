@@ -6,7 +6,6 @@ enum AuthSubmissionStatus {
 }
 
 class AuthState extends Equatable{
-  final GlobalKey<FormState>? registerFormKey;
   final String? email;
   final String? username;
   final String? password;
@@ -14,10 +13,9 @@ class AuthState extends Equatable{
   final bool? showPassword;
   final bool? showConfirmPassword;
   final AuthSubmissionStatus? authStatus;
-  final AutovalidateMode? registerAutovalidate;
+  final AutovalidateMode? confirmPasswordAutovalidate;
 
   const AuthState({
-    this.registerFormKey,
     this.email,
     this.username,
     this.password,
@@ -25,11 +23,10 @@ class AuthState extends Equatable{
     this.showPassword = false,
     this.showConfirmPassword = false,
     this.authStatus = AuthSubmissionStatus.idle,
-    this.registerAutovalidate = AutovalidateMode.disabled
+    this.confirmPasswordAutovalidate = AutovalidateMode.disabled
   });
 
   AuthState copyWith({
-    GlobalKey<FormState>? registerFormKey,
     String? email,
     String? username,
     String? password,
@@ -37,10 +34,9 @@ class AuthState extends Equatable{
     bool? showPassword,
     bool? showConfirmPassword,
     AuthSubmissionStatus? authStatus,
-    AutovalidateMode? registerAutovalidate,
+    AutovalidateMode? confirmPasswordAutovalidate,
   }) {
     return AuthState(
-      registerFormKey: registerFormKey ?? this.registerFormKey,
       email: email ?? this.email,
       username: username ?? this.username,
       password: password ?? this.password,
@@ -48,13 +44,13 @@ class AuthState extends Equatable{
       showPassword: showPassword ?? this.showPassword,
       showConfirmPassword: showConfirmPassword ?? this.showConfirmPassword,
       authStatus: authStatus ?? this.authStatus,
-      registerAutovalidate: registerAutovalidate ?? this.registerAutovalidate
+      confirmPasswordAutovalidate: confirmPasswordAutovalidate ?? this.confirmPasswordAutovalidate
     );
   }
   
   @override
   List<Object?> get props => [
-    registerFormKey, email, username, password, confirmPassword, showPassword,
-    showConfirmPassword, authStatus, registerAutovalidate
+    email, username, password, confirmPassword, showPassword,
+    showConfirmPassword, authStatus, confirmPasswordAutovalidate
   ];
 }

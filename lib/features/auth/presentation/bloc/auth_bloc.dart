@@ -1,21 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/login_entity.dart';
+import 'package:youapp_challenge/features/auth/domain/entities/register_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecase.dart';
+import 'package:youapp_challenge/features/auth/domain/usecases/post_register_usercase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final PostLogin postLogin;
+  final PostRegister postRegister;
   final SharedPrefsService sharedPrefs;
 
-  AuthBloc(this.postLogin, this.sharedPrefs): super(AuthState(registerFormKey: GlobalKey<FormState>())) {
+  AuthBloc(
+    this.postLogin, 
+    this.postRegister,
+    this.sharedPrefs
+  ): super(const AuthState()) {
     on<AuthEmailChanged>(_onChangeEmail);
     on<AuthUsernameChanged>(_onChangeUsername);
     on<AuthPasswordChanged>(_onChangePassword);
     on<AuthConfirmPasswordChanged>(_onChangeConfirmPassword);
+    on<ConfirmPassAutovalidateChanged>(_onChangeConfirmPasswordAutovalidate);
     on<ToggleShowPassword>(_onToggleShowPassword);
     on<ToggleShowConfirmPassword>(_onToggleShowConfirmPassword);
     on<LoginSubmitted>(_onSubmitLogin);
@@ -47,6 +54,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(showConfirmPassword: !state.showConfirmPassword!));
   }
 
+  void _onChangeConfirmPasswordAutovalidate(ConfirmPassAutovalidateChanged event, Emitter<AuthState> emit) {
+    emit(state.copyWith(confirmPasswordAutovalidate: event.autovalidateMode));
+  }
+
   void _onSubmitLogin(LoginSubmitted event, Emitter<AuthState> emit) async {
     try {
       emit(state.copyWith(authStatus: AuthSubmissionStatus.submitting));
@@ -67,8 +78,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onSubmitRegister(RegisterSubmitted event, Emitter<AuthState> emit) async {
     try {
-      print(state.registerFormKey?.currentState);
-      state.registerFormKey?.currentState?.validate();
+      emit(state.copyWith(authStatus: AuthSubmissionStatus.submitting));
+
+      final params = RegisterEntity(email: state.email!, username: state.username, password: state.password!);
+      print(params);
+      // final response = await postRegister(params: params);
+
+      // if (response is DataSuccess && response.data != null) {
+      //   emit(state.copyWith(authStatus: AuthSubmissionStatus.done));
+      // } else if (response is DataFailed) {
+      //   emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
+      // }
     } catch (e) {
       rethrow;
     }
