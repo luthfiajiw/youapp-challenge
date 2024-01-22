@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ToggleShowPassword>(_onToggleShowPassword);
     on<ToggleShowConfirmPassword>(_onToggleShowConfirmPassword);
     on<LoginSubmitted>(_onSubmitLogin);
+    on<RegisterSubmitted>(_onSubmitRegister);
     on<ResetForm>(_onResetState);
   }
 
@@ -59,6 +60,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (response is DataFailed) {
         emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  void _onSubmitRegister(RegisterSubmitted event, Emitter<AuthState> emit) async {
+    try {
+      print(state.registerFormKey?.currentState);
+      state.registerFormKey?.currentState?.validate();
     } catch (e) {
       rethrow;
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/config/theme/palette.dart';
+import 'package:youapp_challenge/core/resources/form_validator_mixin.dart';
 import 'package:youapp_challenge/core/widgets/gradient_background.dart';
 import 'package:youapp_challenge/core/widgets/gradient_button.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
@@ -10,7 +11,7 @@ import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart'
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatelessWidget with FormValidatorMixin {
   final AuthBloc authBloc;
 
   const LoginView({super.key, required this.authBloc});
@@ -90,7 +91,7 @@ class LoginView extends StatelessWidget {
                     ),
                     GradientButton(
                       key: const Key("btn-login"),
-                      disabled: state.email == null || state.password == null || (state.password?.length ?? 0) < 8,
+                      disabled: !isAllFieldFilled([state.email, state.password]) || (state.password?.length ?? 0) < 8,
                       isLoading: state.authStatus == AuthSubmissionStatus.submitting,
                       onTap: () {
                         FocusScope.of(context).unfocus();
