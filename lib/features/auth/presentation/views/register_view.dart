@@ -91,16 +91,20 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                         child: TextFormField(
                           key: const Key("create-password"),
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
+                          obscureText: !state.showPassword!,
                           obscuringCharacter: "*",
                           onChanged: (value) => context.read<AuthBloc>().add(AuthPasswordChanged(password: value)),
                           decoration: InputDecoration(
                             hintText: "Create Password",
                             suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: const GradientIcon(
-                                icon: Icon(
-                                  Icons.visibility_off_outlined
+                              onPressed: () => context.read<AuthBloc>().add(ToggleShowPassword()),
+                                icon: Visibility(
+                                visible: state.showPassword!,
+                                replacement: const GradientIcon(
+                                  icon: Icon(Icons.visibility_off_outlined),
+                                ),
+                                child: const GradientIcon(
+                                  icon: Icon(Icons.visibility_outlined),
                                 ),
                               )
                             )
@@ -113,17 +117,21 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                           key: const Key("confirm-password"),
                           keyboardType: TextInputType.visiblePassword,
                           autovalidateMode: state.confirmPasswordAutovalidate,
-                          obscureText: true,
+                          obscureText: !state.showConfirmPassword!,
                           obscuringCharacter: "*",
                           onChanged: (value) => context.read<AuthBloc>().add(AuthConfirmPasswordChanged(password: value)),
                           validator: (value) => validateConfirmPassword(value, state.password),
                           decoration: InputDecoration(
                             hintText: "Confirm Password",
                             suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: const GradientIcon(
-                                icon: Icon(
-                                  Icons.visibility_off_outlined
+                              onPressed: () => context.read<AuthBloc>().add(ToggleShowConfirmPassword()),
+                                icon: Visibility(
+                                visible: state.showConfirmPassword!,
+                                replacement: const GradientIcon(
+                                  icon: Icon(Icons.visibility_off_outlined),
+                                ),
+                                child: const GradientIcon(
+                                  icon: Icon(Icons.visibility_outlined),
                                 ),
                               )
                             )

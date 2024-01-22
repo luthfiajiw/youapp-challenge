@@ -81,14 +81,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copyWith(authStatus: AuthSubmissionStatus.submitting));
 
       final params = RegisterEntity(email: state.email!, username: state.username, password: state.password!);
-      print(params);
-      // final response = await postRegister(params: params);
+      final response = await postRegister(params: params);
 
-      // if (response is DataSuccess && response.data != null) {
-      //   emit(state.copyWith(authStatus: AuthSubmissionStatus.done));
-      // } else if (response is DataFailed) {
-      //   emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
-      // }
+      if (response is DataSuccess && response.data != null) {
+        emit(state.copyWith(authStatus: AuthSubmissionStatus.done));
+      } else if (response is DataFailed) {
+        emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
+      }
     } catch (e) {
       rethrow;
     }

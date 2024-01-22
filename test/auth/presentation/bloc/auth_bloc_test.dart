@@ -7,6 +7,7 @@ import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/auth_response_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/login_entity.dart';
+import 'package:youapp_challenge/features/auth/domain/entities/register_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecase.dart';
 import 'package:youapp_challenge/features/auth/domain/usecases/post_register_usercase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
@@ -137,6 +138,29 @@ void main() {
             password: "password",
             authStatus: AuthSubmissionStatus.done
           )
+        ];
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'when RegisterSubmitted event is added and succeed emits [AuthSubmissionStatus.done]',
+      build: () => authBloc,
+      act: (bloc) {
+        when(() => mockPostRegister(params: const RegisterEntity(email: "email", username: "ab", password: "password")),)
+          .thenAnswer((_) async => DataSuccess(const AuthResponseEntity(message: "success")));
+        
+        bloc.add(AuthEmailChanged(email: "email"));
+        bloc.add(AuthUsernameChanged(username: "ab"));
+        bloc.add(AuthPasswordChanged(password: "password"));
+        bloc.add(RegisterSubmitted());
+      },
+      expect: () {
+        return const <AuthState>[
+          AuthState(email: "email", username: null, password: null, confirmPassword: null, showPassword: false, showConfirmPassword: false, authStatus: AuthSubmissionStatus.idle, confirmPasswordAutovalidate: AutovalidateMode.disabled),
+          AuthState(email: "email", username: "ab", password: null, confirmPassword: null, showPassword: false, showConfirmPassword: false, authStatus: AuthSubmissionStatus.idle, confirmPasswordAutovalidate: AutovalidateMode.disabled),
+          AuthState(email: "email", username: "ab", password: "password", confirmPassword: null, showPassword: false, showConfirmPassword: false, authStatus: AuthSubmissionStatus.idle, confirmPasswordAutovalidate: AutovalidateMode.disabled),
+          AuthState(email: "email", username: "ab", password: "password", confirmPassword: null, showPassword: false, showConfirmPassword: false, authStatus: AuthSubmissionStatus.submitting, confirmPasswordAutovalidate: AutovalidateMode.disabled),
+          AuthState(email: "email", username: "ab", password: "password", confirmPassword: null, showPassword: false, showConfirmPassword: false, authStatus: AuthSubmissionStatus.done, confirmPasswordAutovalidate: AutovalidateMode.disabled),
         ];
       },
     );
