@@ -8,6 +8,7 @@ import 'package:youapp_challenge/features/auth/data/repositories/auth_repository
 import 'package:youapp_challenge/features/auth/data/sources/remote_auth_source.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/auth_response_entity.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/login_entity.dart';
+import 'package:youapp_challenge/features/auth/domain/entities/register_entity.dart';
 
 void main() {
   late Dio dio;
@@ -31,46 +32,91 @@ void main() {
     authRepo = AuthRepositoryImpl(source: authSource);
   });
 
-  group('Remote Auth Source', () {
+  group('Auth Repo', () {
     const loginData = LoginEntity(
       email: "email",
       username: "",
       password: "123"
     );
 
-    const resSuccess = {
+    const registerData = RegisterEntity(
+      email: "email",
+      username: "username",
+      password: "123"
+    );
+
+    const resLoginSuccess = {
       "message": "User has been logged in successfully",
       "access_token": "token"
     };
+    
+    const resRegisterSuccess = {
+      "message": "User has been created in successfully",
+    };
 
-    const resFailed = {
+    const resLoginFailed = {
       "message": "User not found"
     };
 
-    test('when login is successfully the response should contain access_token', () async {
-      // arrange
-      dioAdapter.onPost('/login', (server) {
-        return server.reply(201, resSuccess);
+    const resRegisterFailed = {
+      "message": "User already exists"
+    };
+
+    group('Login', () {
+      test('when login is successfully the response should contain access_token', () async {
+        // arrange
+        dioAdapter.onPost('/login', (server) {
+          return server.reply(201, resLoginSuccess);
+        });
+
+        // act
+        final response = await authRepo.postLogin(loginData);
+
+        // matcher
+        expect(response, isA<DataSuccess<AuthResponseEntity>>());
+        expect(response.data?.accessToken, isNotNull);
       });
 
-      // act
-      final response = await authRepo.postLogin(loginData);
+      test('when login data is invalid should throw an exception', () async {
+        // arrange
+        dioAdapter.onPost('/login', (server) {
+          return server.reply(201, resLoginFailed);
+        });
 
-      // matcher
-      expect(response, isA<DataSuccess<AuthResponseEntity>>());
-      expect(response.data?.accessToken, isNotNull);
+        // act
+        final response = await authRepo.postLogin(loginData);
+
+        expect(response, isA<DataFailed<AuthResponseEntity>>());
+      });
     });
 
-    test('when login data is invalid should throw an exception', () async {
-      // arrange
-      dioAdapter.onPost('/login', (server) {
-        return server.reply(400, resFailed);
+    group('Login', () {
+      test('when register is successfully the response should contain success message', () async {
+        // arrange
+        dioAdapter.onPost('/register', (server) {
+          return server.reply(201, resRegisterSuccess);
+        });
+
+        // act
+        final response = await authRepo.postRegister(registerData);
+
+        // matcher
+        expect(response, isA<DataSuccess<AuthResponseEntity>>());
+        expect(response.data?.message, resRegisterSuccess["message"]);
       });
 
-      // act
-      final response = await authRepo.postLogin(loginData);
+      test('when register data is invalid should throw an exception', () async {
+        // arrange
+        dioAdapter.onPost('/register', (server) {
+          return server.reply(201, resRegisterFailed);
+        });
 
-      expect(response, isA<DataFailed<AuthResponseEntity>>());
+        // act
+        final response = await authRepo.postRegister(registerData);
+
+        expect(response, isA<DataFailed<AuthResponseEntity>>());
+      });
     });
+
   });
 }

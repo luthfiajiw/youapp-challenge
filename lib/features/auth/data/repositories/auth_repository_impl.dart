@@ -23,9 +23,14 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<DataState<AuthResponseEntity>> postRegister(RegisterEntity registerEntity) {
-    // TODO: implement postRegister
-    throw UnimplementedError();
+  Future<DataState<AuthResponseEntity>> postRegister(RegisterEntity registerEntity) async {
+    try {
+      final response = await _source.postRegister(registerEntity);
+
+      return DataSuccess(response.data);
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
   }
   
 }

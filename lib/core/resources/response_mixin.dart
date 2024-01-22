@@ -11,12 +11,12 @@ mixin ResponseMixin {
     );
   }
 
-  void handleBugResponseAPI(Response response, bool condition) {
+  void handleBugResponseAPI(Response response, bool isError) {
     // 
     // this if statement should not be here,
     // I wrote this only because the api has a bug with status code
     // 
-    if (condition) {
+    if (isError) {
       final exception = DioException(
         requestOptions: response.requestOptions,
         response: Response(
