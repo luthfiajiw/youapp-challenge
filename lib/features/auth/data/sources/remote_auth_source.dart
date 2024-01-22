@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:youapp_challenge/core/resources/response_mixin.dart';
 import 'package:youapp_challenge/core/services/dio_service.dart';
 import 'package:youapp_challenge/features/auth/data/models/auth_response_model.dart';
 import 'package:youapp_challenge/features/auth/domain/entities/login_entity.dart';
+import 'package:youapp_challenge/features/auth/domain/entities/register_entity.dart';
 
-class RemoteAuthSource {
+class RemoteAuthSource with ResponseMixin {
   final DioService _dioService;
 
   RemoteAuthSource({required DioService dioService}) : _dioService = dioService;
@@ -12,7 +14,7 @@ class RemoteAuthSource {
     try {
       const path = "/login";
 
-      final response = await _dioService.dio.post(
+      final result = await _dioService.dio.post(
         path,
         data: {
           "email": loginData.email,
@@ -21,33 +23,30 @@ class RemoteAuthSource {
         }
       );
 
-      // 
-      // this if statement should not be here,
-      // I wrote this only because the api has a bug with status code
-      // 
-      if (
-        response.data["message"] == "User not found"
-        || response.data["message"] == "Incorrect password"
-      ) {
-        final exception = DioException(
-          requestOptions: response.requestOptions,
-          response: Response(
-            requestOptions: response.requestOptions,
-            statusCode: 400,
-            data: response.data
-          )
-        );
+      handleBugResponseAPI(result, result.data?["message"] == "User not found" || result.data["message"] == "Incorrect password");
 
-        throw(exception);
-      }
+      return response(result,  AuthResponseModel.fromJson(result.data));
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-      return Response(
-        requestOptions: response.requestOptions,
-        data: AuthResponseModel.fromJson(response.data),
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
-        headers: response.headers
+  Future<Response<AuthResponseModel>> postRegister(RegisterEntity registerData) async {
+    try {
+      const path = "/register";
+
+      final result = await _dioService.dio.post(
+        path,
+        data: {
+          "email": registerData.email,
+          "username": registerData.username,
+          "password": registerData.password,
+        }
       );
+
+      handleBugResponseAPI(result, result.data?["message"] == "User already exists");
+
+      return response(result,  AuthResponseModel.fromJson(result.data));
     } catch (e) {
       rethrow;
     }

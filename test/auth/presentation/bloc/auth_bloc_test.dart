@@ -30,7 +30,8 @@ void main() {
   });
 
   group('Auth Bloc', () {
-    test('initial state should be empty', () {
+    test('initial state', () {
+      expect(authBloc.state.registerFormKey, isA<GlobalKey<FormState>>());
       expect(authBloc.state.email, isNull);
       expect(authBloc.state.username, isNull);
       expect(authBloc.state.password, isNull);

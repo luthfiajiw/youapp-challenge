@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
@@ -10,7 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final PostLogin postLogin;
   final SharedPrefsService sharedPrefs;
 
-  AuthBloc(this.postLogin, this.sharedPrefs): super(const AuthState()) {
+  AuthBloc(this.postLogin, this.sharedPrefs): super(AuthState(registerFormKey: GlobalKey<FormState>())) {
     on<AuthEmailChanged>(_onChangeEmail);
     on<AuthUsernameChanged>(_onChangeUsername);
     on<AuthPasswordChanged>(_onChangePassword);

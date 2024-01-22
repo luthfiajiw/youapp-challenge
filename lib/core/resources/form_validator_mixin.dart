@@ -1,4 +1,4 @@
-mixin FormValidator {
+mixin FormValidatorMixin {
   // Confirm password validation
   String? validateConfirmPassword(String? value, String password) {
     if (value != password) {

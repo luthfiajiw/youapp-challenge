@@ -6,6 +6,7 @@ enum AuthSubmissionStatus {
 }
 
 class AuthState extends Equatable{
+  final GlobalKey<FormState>? registerFormKey;
   final String? email;
   final String? username;
   final String? password;
@@ -16,6 +17,7 @@ class AuthState extends Equatable{
   final AutovalidateMode? registerAutovalidate;
 
   const AuthState({
+    this.registerFormKey,
     this.email,
     this.username,
     this.password,
@@ -27,6 +29,7 @@ class AuthState extends Equatable{
   });
 
   AuthState copyWith({
+    GlobalKey<FormState>? registerFormKey,
     String? email,
     String? username,
     String? password,
@@ -37,6 +40,7 @@ class AuthState extends Equatable{
     AutovalidateMode? registerAutovalidate,
   }) {
     return AuthState(
+      registerFormKey: registerFormKey ?? this.registerFormKey,
       email: email ?? this.email,
       username: username ?? this.username,
       password: password ?? this.password,

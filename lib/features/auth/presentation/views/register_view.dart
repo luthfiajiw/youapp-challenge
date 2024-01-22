@@ -1,14 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:youapp_challenge/config/theme/palette.dart';
-import 'package:youapp_challenge/core/resources/form_validator.dart';
+import 'package:youapp_challenge/core/resources/form_validator_mixin.dart';
 import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
 import 'package:youapp_challenge/core/widgets/gradient_background.dart';
 import 'package:youapp_challenge/core/widgets/gradient_button.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
 
-class RegisterView extends StatelessWidget with FormValidator {
+class RegisterView extends StatelessWidget with FormValidatorMixin {
   const RegisterView({super.key});
 
   @override
