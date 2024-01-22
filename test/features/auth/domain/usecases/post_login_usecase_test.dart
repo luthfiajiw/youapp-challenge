@@ -39,7 +39,7 @@ void main() {
     )
   );
 
-  group("Login Request", () {
+  group("Post Login", () {
     test('when user exists should return data success', () async {
       when(() => mockAuthRepository.postLogin(loginData),)
         .thenAnswer((_) async => DataSuccess(successResponse));

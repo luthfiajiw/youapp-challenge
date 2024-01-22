@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,13 +32,17 @@ void main() {
   group('Auth Bloc', () {
     test('initial state should be empty', () {
       expect(authBloc.state.email, isNull);
+      expect(authBloc.state.username, isNull);
       expect(authBloc.state.password, isNull);
+      expect(authBloc.state.confirmPassword, isNull);
       expect(authBloc.state.showPassword, false);
+      expect(authBloc.state.showConfirmPassword, false);
       expect(authBloc.state.authStatus, AuthSubmissionStatus.idle);
+      expect(authBloc.state.registerAutovalidate, AutovalidateMode.disabled);
     });
 
     blocTest<AuthBloc, AuthState>(
-      'should emit [AuthState] when AuthEmailChanged event is added.',
+      'should emit [AuthState.email] when AuthEmailChanged event is added.',
       build: () => authBloc,
       act: (bloc) => bloc.add(AuthEmailChanged(email: "abc@mail.com")),
       expect: () => const <AuthState>[
@@ -46,7 +51,16 @@ void main() {
     );
 
     blocTest<AuthBloc, AuthState>(
-      'should emit [AuthState] when AuthPasswordChanged event is added.',
+      'should emit [AuthState.username] when AuthUsernameChanged event is added.',
+      build: () => authBloc,
+      act: (bloc) => bloc.add(AuthUsernameChanged(username: "abc")),
+      expect: () => const <AuthState>[
+        AuthState(username: "abc")
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthState.password] when AuthPasswordChanged event is added.',
       build: () => authBloc,
       act: (bloc) => bloc.add(AuthPasswordChanged(password: "1234")),
       expect: () => const <AuthState>[
@@ -55,11 +69,29 @@ void main() {
     );
 
     blocTest<AuthBloc, AuthState>(
-      'should emit [AuthState] when ToggleShowPassword event is added.',
+      'should emit [AuthState.confirmPassword] when AuthConfirmPasswordChanged event is added.',
+      build: () => authBloc,
+      act: (bloc) => bloc.add(AuthConfirmPasswordChanged(password: "1234")),
+      expect: () => const <AuthState>[
+        AuthState(confirmPassword: "1234")
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthState.showPassword] when ToggleShowPassword event is added.',
       build: () => authBloc,
       act: (bloc) => bloc.add(ToggleShowPassword()),
       expect: () => const <AuthState>[
         AuthState(showPassword: true)
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthState.confirmShowPassword] when ToggleShowConfirmPassword event is added.',
+      build: () => authBloc,
+      act: (bloc) => bloc.add(ToggleShowConfirmPassword()),
+      expect: () => const <AuthState>[
+        AuthState(showConfirmPassword: true)
       ],
     );
 
@@ -103,6 +135,15 @@ void main() {
           )
         ];
       },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'should emit [AuthState] when ResetForm event is added.',
+      build: () => authBloc,
+      act: (bloc) => bloc.add(ResetForm()),
+      expect: () => const <AuthState>[
+        AuthState()
+      ],
     );
   });
 }

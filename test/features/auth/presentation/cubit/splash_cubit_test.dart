@@ -26,7 +26,10 @@ void main() {
         return splashCubit;
       },
       act: (cubit) => cubit.authCheck(),
-      expect: () => <SplashState>[AccessTokenExists()],
+      expect: () {
+        expect(sharedPrefService.getAccessToken(), "token");
+        return <SplashState>[AccessTokenExists()];
+      },
     );
 
     blocTest<SplashCubit, SplashState>(

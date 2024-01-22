@@ -12,21 +12,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(this.postLogin, this.sharedPrefs): super(const AuthState()) {
     on<AuthEmailChanged>(_onChangeEmail);
+    on<AuthUsernameChanged>(_onChangeUsername);
     on<AuthPasswordChanged>(_onChangePassword);
+    on<AuthConfirmPasswordChanged>(_onChangeConfirmPassword);
     on<ToggleShowPassword>(_onToggleShowPassword);
+    on<ToggleShowConfirmPassword>(_onToggleShowConfirmPassword);
     on<LoginSubmitted>(_onSubmitLogin);
+    on<ResetForm>(_onResetState);
   }
 
   void _onChangeEmail(AuthEmailChanged event, Emitter<AuthState> emit) {
     emit(state.copyWith(email: event.email));
   }
 
+  void _onChangeUsername(AuthUsernameChanged event, Emitter<AuthState> emit) {
+    emit(state.copyWith(username: event.username));
+  }
+
   void _onChangePassword(AuthPasswordChanged event, Emitter<AuthState> emit) {
     emit(state.copyWith(password: event.password));
   }
 
+  void _onChangeConfirmPassword(AuthConfirmPasswordChanged event, Emitter<AuthState> emit) {
+    emit(state.copyWith(confirmPassword: event.password));
+  }
+
   void _onToggleShowPassword(ToggleShowPassword event, Emitter<AuthState> emit) {
     emit(state.copyWith(showPassword: !state.showPassword!));
+  }
+
+  void _onToggleShowConfirmPassword(ToggleShowConfirmPassword event, Emitter<AuthState> emit) {
+    emit(state.copyWith(showConfirmPassword: !state.showConfirmPassword!));
   }
 
   void _onSubmitLogin(LoginSubmitted event, Emitter<AuthState> emit) async {
@@ -45,5 +61,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  void _onResetState(ResetForm event, Emitter<AuthState> emit) {
+    emit(const AuthState());
   }
 }
