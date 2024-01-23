@@ -14,11 +14,13 @@ class DarkTheme with SubThemeMixin {
       primaryColor: Palette.primaryDark,
       appBarTheme: const AppBarTheme(
         color: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         iconTheme: IconThemeData(color: mainTextColorDark),
         titleTextStyle: TextStyle(color: mainTextColorDark),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.light,
-          statusBarColor: Colors.transparent
+          statusBarColor: Colors.transparent,
         ),
       ),
       scaffoldBackgroundColor: Colors.transparent,

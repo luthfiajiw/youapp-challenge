@@ -19,50 +19,53 @@ class UserView extends StatefulWidget {
 class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: customAppbar(
-        title: const Text(
-          "@acuy",
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700
-          ),
-        ),
-        actions: [
-          BlocListener<SplashCubit, SplashState>(
-            listener: (context, state) {
-              if (state is AccessTokenEmpty) {
-                Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
-              }
-            },
-            child: IconButton(
-              onPressed: () => context.read<SplashCubit>().clearAccessToken(),
-              icon: const GradientIcon(
-                icon: Icon(
-                  Icons.logout_rounded,
-                ),
-              )
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: customAppbar(
+          title: const Text(
+            "@acuy",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700
             ),
-          )
-        ]
-      ),
-      body: ListView(
-        children: const [
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: UserHeader(),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: UserAbout()
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: UserInterest(),
-          ),
-          SizedBox(height: 20,)
-        ],
+          actions: [
+            BlocListener<SplashCubit, SplashState>(
+              listener: (context, state) {
+                if (state is AccessTokenEmpty) {
+                  Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
+                }
+              },
+              child: IconButton(
+                onPressed: () => context.read<SplashCubit>().clearAccessToken(),
+                icon: const GradientIcon(
+                  icon: Icon(
+                    Icons.logout_rounded,
+                  ),
+                )
+              ),
+            )
+          ]
+        ),
+        body: ListView(
+          children: const [
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: UserHeader(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: UserAbout()
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: UserInterest(),
+            ),
+            SizedBox(height: 20,)
+          ],
+        ),
       ),
     );
   }

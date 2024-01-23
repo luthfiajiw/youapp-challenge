@@ -35,7 +35,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 8, 8, 20),
+      padding: const EdgeInsets.fromLTRB(20, 8, 12, 20),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -58,6 +58,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
               Visibility(
                 visible: _isExpanded,
                 replacement: EditButton(
+                  key: const Key("btn-edit-about"),
                   onTap: () {
                     _controller.forward();
                     setState(() {
@@ -66,6 +67,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                   },
                 ),
                 child: InkWell(
+                  key: const Key("btn-save-about"),
                   onTap: () {
                     _controller.reverse();
                     setState(() {
@@ -111,20 +113,39 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
 
 List<Widget> _buildFormAbout() {
   return [
-    _buildTextfield(label: "Display Name:"),
-    _buildTextfield(label: "Birthdata:"),
-    _buildTextfield(label: "Horoscope:"),
-    _buildTextfield(label: "Zodiac:"),
-    _buildTextfield(label: "Height:"),
-    _buildTextfield(label: "Weight:"),
+    _buildTextfield(
+      label: "Display Name:",
+      hintText: "Enter Name"
+    ),
+    _buildTextfield(
+      label: "Birthday:",
+      hintText: "DD MM YYYY"
+    ),
+    _buildTextfield(
+      label: "Horoscope:",
+      hintText: "--"
+    ),
+    _buildTextfield(
+      label: "Zodiac:",
+      hintText: "--"
+    ),
+    _buildTextfield(
+      label: "Height:",
+      hintText: "0"
+    ),
+    _buildTextfield(
+      label: "Weight:",
+      hintText: "0"
+    ),
   ];
 }
 
 Widget _buildTextfield({
-  required String label
+  required String label,
+  String? hintText
 }) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 16.0),
+    padding: const EdgeInsets.only(bottom: 16.0, right: 8),
     child: Row(
       children: [
         SizedBox(
@@ -137,16 +158,19 @@ Widget _buildTextfield({
         const SizedBox(width: 32,),
         Expanded(
           child: TextFormField(
+            key: Key(label),
+            textAlign: TextAlign.right,
             decoration: InputDecoration(
+              hintText: hintText,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(9),
-                borderSide: const BorderSide(width: 1, color: Colors.white)
+                borderSide: const BorderSide(width: 1, color: Colors.white24)
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(9),
-                borderSide: const BorderSide(width: 1, color: Colors.white)
+                borderSide: const BorderSide(width: 1, color: Colors.white24)
               ),
-              contentPadding: const EdgeInsets.fromLTRB(16, 6, 0, 6)
+              contentPadding: const EdgeInsets.fromLTRB(0, 6, 16, 6)
             ),
           ),
         ),
@@ -159,6 +183,7 @@ Widget _buildUploadBtn() {
   return Row(
     children: [
       InkWell(
+        key: const Key("btn-upload"),
         onTap: () {},
         borderRadius: BorderRadius.circular(22),
         child: Container(

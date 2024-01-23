@@ -13,7 +13,7 @@ class _UserHeaderState extends State<UserHeader> {
   Widget build(BuildContext context) {
     return Container(
       height: 180,
-      padding: const EdgeInsets.fromLTRB(20, 8, 8, 20),
+      padding: const EdgeInsets.fromLTRB(20, 8, 14, 20),
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.15),
