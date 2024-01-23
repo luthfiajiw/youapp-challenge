@@ -6,7 +6,7 @@ import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart'
 import 'package:youapp_challenge/features/auth/presentation/views/login_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/register_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/splash_view.dart';
-import 'package:youapp_challenge/features/user/presentation/user_view.dart';
+import 'package:youapp_challenge/features/user/presentation/views/user_view.dart';
 
 class Routes {
   static Route<dynamic>? generate(RouteSettings settings) {

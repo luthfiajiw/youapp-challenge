@@ -24,6 +24,7 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp(
         title: "IndRecord",
+        debugShowCheckedModeBanner: false,
         theme: DarkTheme().buildDarkTheme(),
         initialRoute: RoutePaths.splash,
         onGenerateRoute: Routes.generate,
