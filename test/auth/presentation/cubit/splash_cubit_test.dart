@@ -38,5 +38,17 @@ void main() {
       act: (cubit) => cubit.authCheck(),
       expect: () => <SplashState>[AccessTokenEmpty()],
     );
+
+    blocTest<SplashCubit, SplashState>(
+      'emits [MyState] when MyEvent is added.',
+      build: () => splashCubit,
+      act: (cubit) => cubit.clearAccessToken(),
+      expect: () {
+        expect(sharedPrefService.getAccessToken(), null);
+        return <SplashState>[
+          AccessTokenEmpty()
+        ];
+      },
+    );
   });
 }

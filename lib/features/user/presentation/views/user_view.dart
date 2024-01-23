@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
+import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
+import 'package:youapp_challenge/features/auth/presentation/cubit/splash_state.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_about.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_header.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_interest.dart';
@@ -25,13 +29,20 @@ class _UserViewState extends State<UserView> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const GradientIcon(
-              icon: Icon(
-                Icons.logout_rounded,
-              ),
-            )
+          BlocListener<SplashCubit, SplashState>(
+            listener: (context, state) {
+              if (state is AccessTokenEmpty) {
+                Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
+              }
+            },
+            child: IconButton(
+              onPressed: () => context.read<SplashCubit>().clearAccessToken(),
+              icon: const GradientIcon(
+                icon: Icon(
+                  Icons.logout_rounded,
+                ),
+              )
+            ),
           )
         ]
       ),

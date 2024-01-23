@@ -16,4 +16,14 @@ class SplashCubit extends Cubit<SplashState> {
       emit(AccessTokenEmpty());
     }
   }
+
+  void clearAccessToken() async {
+    try {
+      await sharedPrefs.clearPrefs();
+
+      emit(AccessTokenEmpty());
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

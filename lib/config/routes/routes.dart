@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/core/services/locator_service.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/login_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/register_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/splash_view.dart';

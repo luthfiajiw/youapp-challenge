@@ -19,4 +19,7 @@ class SharedPrefsService {
   }
   // =============
 
+  Future<void> clearPrefs() async {
+    await prefs.clear();
+  }
 }
