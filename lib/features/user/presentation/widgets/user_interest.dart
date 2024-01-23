@@ -35,7 +35,7 @@ class _UserInterestState extends State<UserInterest> {
               EditButton()
             ],
           ),
-          SizedBox(height: 14,),
+          SizedBox(height: 22,),
           Text(
             "Add in your interest to find a better match",
             style: TextStyle(color: Colors.white60),

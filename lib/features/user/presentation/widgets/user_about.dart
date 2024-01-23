@@ -87,7 +87,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
               )
             ],
           ),
-          const SizedBox(height: 24,),
+          SizedBox(height: _isExpanded ? 24 : 22,),
           SizeTransition(
             sizeFactor: _sizeTween.animate(_animation),
             child: Column(
