@@ -31,6 +31,11 @@ class DarkTheme with SubThemeMixin {
       textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Colors.greenAccent
       ),
+      chipTheme: ChipThemeData(
+        backgroundColor: Colors.white.withOpacity(.05),
+        side: BorderSide.none,
+        surfaceTintColor: Colors.transparent
+      ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(
           color: Colors.white.withOpacity(.4),

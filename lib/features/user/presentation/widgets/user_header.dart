@@ -17,7 +17,7 @@ class _UserHeaderState extends State<UserHeader> {
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Container(
-          height: 180,
+          height: 200,
           padding: const EdgeInsets.fromLTRB(20, 8, 14, 20),
           width: double.infinity,
           decoration: BoxDecoration(

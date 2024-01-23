@@ -25,12 +25,12 @@ class UserEntity extends Equatable {
   final List? interests;
 
   const UserEntity({
-    this.email = "",
-    this.username = "",
-    this.name = "",
-    this.birthday = "",
-    this.horoscope = "",
-    this.zodiac = "",
+    this.email = "--",
+    this.username = "--",
+    this.name = "--",
+    this.birthday = "--",
+    this.horoscope = "--",
+    this.zodiac = "--",
     this.height = 0,
     this.weight = 0,
     this.interests = const []

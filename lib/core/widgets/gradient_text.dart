@@ -11,8 +11,8 @@ class GradientText extends StatelessWidget {
       shaderCallback: (bounds) {
         return LinearGradient(
           colors: [
-            Palette.golden2,
             Palette.golden1,
+            Palette.golden2,
             Palette.golden4,
             Palette.golden5,
           ]
