@@ -36,7 +36,7 @@ class DarkTheme with SubThemeMixin {
           fontSize: 14
         ),
         filled: true,
-        fillColor: Colors.white10,
+        fillColor: Colors.white.withOpacity(.05),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(9),
           borderSide: BorderSide.none

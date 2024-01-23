@@ -25,7 +25,8 @@ class _UserViewState extends State<UserView> {
         title: const Text(
           "@acuy",
           style: TextStyle(
-            fontSize: 14
+            fontSize: 14,
+            fontWeight: FontWeight.w700
           ),
         ),
         actions: [
@@ -60,6 +61,7 @@ class _UserViewState extends State<UserView> {
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: UserInterest(),
           ),
+          SizedBox(height: 20,)
         ],
       ),
     );

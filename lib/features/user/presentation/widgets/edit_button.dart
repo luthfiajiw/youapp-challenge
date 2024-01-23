@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 
 class EditButton extends StatelessWidget {
-  const EditButton({super.key});
+  final VoidCallback? onTap;
+
+  const EditButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => print("CUyy"),
+      onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: const Padding(
         padding: EdgeInsets.all(10.0),
