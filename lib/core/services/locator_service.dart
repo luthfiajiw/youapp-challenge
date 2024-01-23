@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youapp_challenge/core/services/dio_interceptor.dart';
 import 'package:youapp_challenge/core/services/dio_service.dart';
 import 'package:youapp_challenge/core/services/shared_prefs_service.dart';
 import 'package:youapp_challenge/features/auth/data/repositories/auth_repository_impl.dart';
@@ -24,7 +25,8 @@ Future<void> setupDependencies() async {
     DioService(
       Dio(
         BaseOptions(baseUrl: 'https://techtest.youapp.ai/api')
-      )
+      ),
+      interceptor: DioInterceptor()
     )
   );
 
