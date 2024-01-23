@@ -20,12 +20,12 @@ void main() {
     test('when user exists should return data success', () async {
       // arrange
       when(() => mockUserRepository.getUser())
-        .thenAnswer((_) async => DataSuccess(const UserEntity()));
+        .thenAnswer((_) async => DataSuccess(const UserResponseEntity()));
       
       // act
       final response = await usecase();
 
-      expect(response, isA<DataSuccess<UserEntity>>());
+      expect(response, isA<DataSuccess<UserResponseEntity>>());
     });
   });
 }
