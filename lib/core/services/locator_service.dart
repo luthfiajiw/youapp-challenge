@@ -11,6 +11,11 @@ import 'package:youapp_challenge/features/auth/domain/usecases/post_login_usecas
 import 'package:youapp_challenge/features/auth/domain/usecases/post_register_usercase.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
+import 'package:youapp_challenge/features/user/data/repositories/user_repository_impl.dart';
+import 'package:youapp_challenge/features/user/data/source/remote_user_source.dart';
+import 'package:youapp_challenge/features/user/domain/repositories/user_repository.dart';
+import 'package:youapp_challenge/features/user/domain/usecases/get_user_usecase.dart';
+import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 
 final locator = GetIt.instance;
 
@@ -34,10 +39,16 @@ Future<void> setupDependencies() async {
   locator.registerSingleton<RemoteAuthSource>(
     RemoteAuthSource(dioService: locator.get<DioService>())
   );
+  locator.registerSingleton<RemoteUserSource>(
+    RemoteUserSource(dioService: locator.get<DioService>())
+  );
 
   // REPOSITORIES
   locator.registerSingleton<AuthRepository>(
     AuthRepositoryImpl(source: locator.get<RemoteAuthSource>())
+  );
+  locator.registerSingleton<UserRepository>(
+    UserRepositoryImpl(source: locator.get<RemoteUserSource>())
   );
 
   // USECASES
@@ -47,10 +58,16 @@ Future<void> setupDependencies() async {
   locator.registerSingleton<PostRegister>(
     PostRegister(authRepository: locator.get<AuthRepository>())
   );
+  locator.registerSingleton<GetUser>(
+    GetUser(userRepository: locator.get<UserRepository>())
+  );
 
   // CUBITS
   locator.registerFactory(() {
     return SplashCubit(locator.get<SharedPrefsService>());
+  });
+  locator.registerFactory(() {
+    return UserCubit(locator.get<GetUser>());
   });
 
   // BLOCS

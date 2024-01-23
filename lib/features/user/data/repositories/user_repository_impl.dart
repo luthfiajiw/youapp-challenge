@@ -7,7 +7,7 @@ import 'package:youapp_challenge/features/user/domain/repositories/user_reposito
 class UserRepositoryImpl extends UserRepository {
   final RemoteUserSource _userSource;
 
-  UserRepositoryImpl({required RemoteUserSource userSource}) : _userSource = userSource;
+  UserRepositoryImpl({required RemoteUserSource source}) : _userSource = source;
 
   @override
   Future<DataState<UserResponseEntity>> getUser() async {

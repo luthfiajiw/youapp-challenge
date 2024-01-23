@@ -26,7 +26,7 @@ void main() {
     
     userSource = RemoteUserSource(dioService: dioService);
 
-    userRepo = UserRepositoryImpl(userSource: userSource);
+    userRepo = UserRepositoryImpl(source: userSource);
   });
 
   group('User Repo', () {

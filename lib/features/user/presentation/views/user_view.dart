@@ -5,6 +5,8 @@ import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_state.dart';
+import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
+import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_about.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_header.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/user_interest.dart';
@@ -18,18 +20,59 @@ class UserView extends StatefulWidget {
 
 class _UserViewState extends State<UserView> {
   @override
+  void initState() {
+    Future.microtask(() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return const Dialog(
+            shape: CircleBorder(),
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            child: Center(
+              child: SizedBox(
+                height: 35,
+                width: 35,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+      return context.read<UserCubit>().onGetUser();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: customAppbar(
-          title: const Text(
-            "@acuy",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700
-            ),
+          title: BlocConsumer<UserCubit, UserState>(
+            listener: (context, state) {
+              if (state.getUserStatus == GetUserStatus.done) {
+                // dismiss dialog
+                Navigator.pop(context);
+              }
+            },
+            builder: (context, state) {
+              return Visibility(
+                visible: state.getUserStatus == GetUserStatus.done,
+                child: Text(
+                  "@${state.username!}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700
+                  ),
+                ),
+              );
+            },
           ),
           actions: [
             BlocListener<SplashCubit, SplashState>(

@@ -5,6 +5,7 @@ import 'package:youapp_challenge/config/routes/routes.dart';
 import 'package:youapp_challenge/config/theme/dark_theme.dart';
 import 'package:youapp_challenge/core/services/locator_service.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
+import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -20,6 +21,9 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider<SplashCubit>(
           create: (context) => locator.get<SplashCubit>(),
+        ),
+        BlocProvider<UserCubit>(
+          create: (context) => locator.get<UserCubit>(),
         )
       ],
       child: MaterialApp(
