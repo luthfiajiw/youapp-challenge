@@ -14,10 +14,10 @@ import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart
 
 class RegisterView extends StatelessWidget with FormValidatorMixin {
   final AuthBloc authBloc;
+  final GlobalKey<FormState> formKey;
 
-  RegisterView({super.key, required this.authBloc});
+  RegisterView({super.key, required this.authBloc, required this.formKey});
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   void _onValidateForm(BuildContext context) {
     if (formKey.currentState!.validate()) {
@@ -40,6 +40,9 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
             listener: (context, state) {
               if (state.authStatus == AuthSubmissionStatus.done) {
                 Navigator.pop(context);
+              }
+              if (state.authStatus == AuthSubmissionStatus.error) {
+                // Handle Snackbar Error Here
               }
             },
             builder: (context, state) {
@@ -140,8 +143,12 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
                       ),
                       GradientButton(
                         key: const Key("btn-register"),
+                        isLoading: state.authStatus == AuthSubmissionStatus.submitting,
                         disabled: !isAllFieldFilled([state.email, state.username, state.password, state.confirmPassword]) || (state.password?.length ?? 0) < 8,
-                        onTap: () => _onValidateForm(context),
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          _onValidateForm(context);
+                        },
                         padding: const EdgeInsets.all(14),
                         child: const Text(
                           "Register",

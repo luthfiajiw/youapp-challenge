@@ -27,6 +27,8 @@ class _SplashViewState extends State<SplashView> {
       listener: (context, state) {
         if (state is AccessTokenEmpty) {
           Navigator.pushReplacementNamed(context, RoutePaths.login);
+        } else {
+          Navigator.pushReplacementNamed(context, RoutePaths.user);
         }
       },
       child: Container(

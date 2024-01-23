@@ -26,7 +26,10 @@ class Routes {
       case RoutePaths.register:
         return CupertinoPageRoute(
           settings: const RouteSettings(name: RoutePaths.register),
-          builder: (context) => RegisterView(authBloc: locator.get<AuthBloc>(),),
+          builder: (context) => RegisterView(
+            authBloc: locator.get<AuthBloc>(),
+            formKey: GlobalKey<FormState>(),
+          ),
         );
       case RoutePaths.user:
         return CupertinoPageRoute(
