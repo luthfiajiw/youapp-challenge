@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
+import 'package:youapp_challenge/core/widgets/screen_loading.dart';
+import 'package:youapp_challenge/features/user/domain/entities/form_user_entity.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
+import 'package:youapp_challenge/features/user/presentation/widgets/about_textfield.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/edit_button.dart';
 
 class UserAbout extends StatefulWidget {
@@ -41,12 +45,60 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
     super.initState();
   }
 
+  void handleSubmit(BuildContext context, UserState state) {
+    final form = FormUserEntity(
+      name: nameController.text,
+      birthday: birthdayController.text,
+      height: heightController.text.isEmpty ? 0 : int.parse(heightController.text),
+      weight: weightController.text.isEmpty ? 0 : int.parse(weightController.text),
+      interests: state.interests!,
+    );
+
+    FocusScope.of(context).unfocus();
+    showScreenLoading(context);
+    context.read<UserCubit>().onPutUser(form);
+  }
+
+  Future<void> pickDate(BuildContext context, String birthday) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: birthday.isEmpty ? DateTime.now() : DateTime.parse(birthday),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Colors.white,
+              onSurface: Colors.white
+            )
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      birthdayController.text = formattedDate;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
+      listenWhen: (previous, current) {
+        return previous.getUserStatus != current.getUserStatus || previous.putUserStatus != current.putUserStatus;
+      },
       listener: (context, state) {
+        if (state.putUserStatus == PutUserStatus.done) {
+          context.read<UserCubit>().onGetUser();
+        }
         if (state.getUserStatus == GetUserStatus.done) {
+          _controller.reverse();
           setState(() {
+             _isExpanded = false;
             nameController.text = state.name!;
             birthdayController.text = state.birthday!;
             horoscopeController.text = state.horoscope!;
@@ -91,12 +143,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                     ),
                     child: InkWell(
                       key: const Key("btn-save-about"),
-                      onTap: () {
-                        _controller.reverse();
-                        setState(() {
-                          _isExpanded = false;
-                        });
-                      },
+                      onTap: () => handleSubmit(context, state),
                       child: const Padding(
                         padding: EdgeInsets.all(10.0),
                         child: GradientText(
@@ -117,37 +164,40 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                   children: [
                     _buildUploadBtn(),
                     const SizedBox(height: 24,),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Display Name:",
                       hintText: "Enter Name",
                       controller: nameController
                     ),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Birthday:",
                       hintText: "DD MM YYYY",
                       controller: birthdayController,
-                      readOnly: true
+                      readOnly: true,
+                      onTap: () {
+                        pickDate(context, state.birthday!);
+                      },
                     ),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Horoscope:",
                       hintText: "--",
                       controller: horoscopeController,
                       disabled: true,
                       readOnly: true,
                     ),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Zodiac:",
                       hintText: "--",
                       controller: zodiacController,
                       disabled: true,
                       readOnly: true
                     ),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Height:",
                       hintText: "0",
                       controller: heightController
                     ),
-                    _buildTextfield(
+                    AboutTextField(
                       label: "Weight:",
                       hintText: "0",
                       controller: weightController
@@ -160,7 +210,10 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildField(label: "Birthday:", value: state.birthday),
+                    _buildField(
+                      label: "Birthday:",
+                      value:state.birthday!.isEmpty ? "--" : "${DateFormat("dd / MM / yyyy").format(DateTime.parse(state.birthday!))} (Age ${state.age})"
+                    ),
                     _buildField(label: "Horoscope:", value: state.horoscope),
                     _buildField(label: "Zodiac:", value: state.zodiac),
                     _buildField(label: "Height:", value: "${state.height} cm"),
@@ -191,64 +244,12 @@ Widget _buildField({
     padding: const EdgeInsets.only(bottom: 14.0),
     child: Row(
       children: [
-        SizedBox(
-          width: 100,
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white60),
-          )
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white60),
         ),
-        const SizedBox(width: 24,),
-        Expanded(
-          child: Text("$value"),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildTextfield({
-  required String label,
-  String? hintText,
-  TextEditingController? controller,
-  bool? readOnly = false,
-  bool? disabled = false,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16.0, right: 8),
-    child: Row(
-      children: [
-        SizedBox(
-          width: 100,
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white60),
-          )
-        ),
-        const SizedBox(width: 24,),
-        Expanded(
-          child: TextFormField(
-            key: Key(label),
-            readOnly: readOnly!,
-            textAlign: TextAlign.right,
-            style: TextStyle(
-              color: disabled! ? Colors.white24 : Colors.white
-            ),
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9),
-                borderSide: const BorderSide(width: 1, color: Colors.white24)
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9),
-                borderSide: const BorderSide(width: 1, color: Colors.white24)
-              ),
-              contentPadding: const EdgeInsets.only(right: 16)
-            ),
-          ),
-        ),
+        const SizedBox(width: 8,),
+        Text("$value"),
       ],
     ),
   );

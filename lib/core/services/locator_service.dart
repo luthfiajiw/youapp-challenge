@@ -15,6 +15,7 @@ import 'package:youapp_challenge/features/user/data/repositories/user_repository
 import 'package:youapp_challenge/features/user/data/source/remote_user_source.dart';
 import 'package:youapp_challenge/features/user/domain/repositories/user_repository.dart';
 import 'package:youapp_challenge/features/user/domain/usecases/get_user_usecase.dart';
+import 'package:youapp_challenge/features/user/domain/usecases/put_user_usecase.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 
 final locator = GetIt.instance;
@@ -61,13 +62,16 @@ Future<void> setupDependencies() async {
   locator.registerSingleton<GetUser>(
     GetUser(userRepository: locator.get<UserRepository>())
   );
+  locator.registerSingleton<PutUser>(
+    PutUser(userRepository: locator.get<UserRepository>())
+  );
 
   // CUBITS
   locator.registerFactory(() {
     return SplashCubit(locator.get<SharedPrefsService>());
   });
   locator.registerFactory(() {
-    return UserCubit(locator.get<GetUser>());
+    return UserCubit(locator.get<GetUser>(), locator.get<PutUser>());
   });
 
   // BLOCS

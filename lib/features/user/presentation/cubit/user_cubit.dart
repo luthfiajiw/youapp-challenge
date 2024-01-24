@@ -20,6 +20,21 @@ class UserCubit extends Cubit<UserState> {
 
       if (response is DataSuccess && response.data != null) {
         UserEntity user = response.data!.data!;
+        int age = 0;
+
+        if (user.birthday!.isNotEmpty) {
+          DateTime birthDate = DateTime.parse(user.birthday!);
+          DateTime now = DateTime.now();
+
+          int diffInYears = now.year - birthDate.year;
+          if (now.month < birthDate.month ||
+              (now.month == birthDate.month && now.day < birthDate.day)) {
+            // If today's date is before the birthdate this year, subtract one year.
+            diffInYears--;
+          }
+
+          age = diffInYears;
+        }
 
         emit(state.copyWith(
           getUserStatus: GetUserStatus.done,
@@ -29,10 +44,12 @@ class UserCubit extends Cubit<UserState> {
           birthday: user.birthday,
           horoscope: user.horoscope,
           zodiac: user.zodiac,
+          age: age,
           height: user.height,
           weight: user.weight,
           interests: user.interests,
         ));
+        emit(state.copyWith(getUserStatus: GetUserStatus.idle));
       } else {
         emit(state.copyWith(getUserStatus: GetUserStatus.error));
       }
@@ -48,25 +65,25 @@ class UserCubit extends Cubit<UserState> {
       final response = await _putUser(params: form);
 
       if (response is DataSuccess && response.data != null) {
-        UserEntity user = response.data!.data!;
-
-        emit(state.copyWith(
-          putUserStatus: PutUserStatus.done,
-          email: user.email,
-          username: user.username,
-          name: user.name,
-          birthday: user.birthday,
-          horoscope: user.horoscope,
-          zodiac: user.zodiac,
-          height: user.height,
-          weight: user.weight,
-          interests: user.interests,
-        ));
+        emit(state.copyWith(putUserStatus: PutUserStatus.done));
+        emit(state.copyWith(putUserStatus: PutUserStatus.idle));
       } else {
         emit(state.copyWith(putUserStatus: PutUserStatus.error));
       }
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> setGetStatusToIdle() async {
+    emit(state.copyWith(
+      getUserStatus: GetUserStatus.idle,
+    ));
+  }
+
+  Future<void> setPutStatusToIdle() async {
+    emit(state.copyWith(
+      putUserStatus: PutUserStatus.idle,
+    ));
   }
 }

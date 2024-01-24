@@ -33,7 +33,7 @@ class RemoteUserSource with ResponseMixin{
         "interests": form.interests,
       };
 
-      final result = await _dioService.dio.get(path, data: data);
+      final result = await _dioService.dio.put(path, data: data);
 
       return response(result, UserResponseModel.fromJson(result.data));
     } catch (e) {

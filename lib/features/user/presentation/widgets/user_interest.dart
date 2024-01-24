@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:youapp_challenge/core/widgets/chip.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
 import 'package:youapp_challenge/features/user/presentation/widgets/edit_button.dart';
@@ -53,12 +54,7 @@ class _UserInterestState extends State<UserInterest> {
                   children: List.generate(state.interests!.length, (index) {
                     String interest = state.interests![index];
 
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(.05),
-                        borderRadius: BorderRadius.circular(24)
-                      ),
+                    return CustomChip(
                       child: Text(interest),
                     );
                   }),

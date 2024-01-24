@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
+import 'package:youapp_challenge/core/widgets/screen_loading.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
@@ -21,26 +22,7 @@ class _UserViewState extends State<UserView> {
   @override
   void initState() {
     Future.microtask(() {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return const Dialog(
-            shape: CircleBorder(),
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            child: Center(
-              child: SizedBox(
-                height: 35,
-                width: 35,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          );
-        },
-      );
+      showScreenLoading(context);
       return context.read<UserCubit>().onGetUser();
     });
     super.initState();
@@ -54,15 +36,18 @@ class _UserViewState extends State<UserView> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: customAppbar(
           title: BlocConsumer<UserCubit, UserState>(
+            listenWhen: (previous, current) {
+              return previous.getUserStatus != current.getUserStatus;
+            },
             listener: (context, state) {
               if (state.getUserStatus == GetUserStatus.done) {
-                // dismiss dialog
+                // dismiss screen loading
                 Navigator.pop(context);
               }
             },
             builder: (context, state) {
               return Visibility(
-                visible: state.getUserStatus == GetUserStatus.done,
+                visible: state.username != null,
                 child: Text(
                   "@${state.username!}",
                   style: const TextStyle(
@@ -90,15 +75,15 @@ class _UserViewState extends State<UserView> {
         body: ListView(
           children: const [
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(12),
               child: UserHeader(),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               child: UserAbout()
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: UserInterest(),
             ),
             SizedBox(height: 20,)

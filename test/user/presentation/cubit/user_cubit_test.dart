@@ -66,10 +66,24 @@ void main() {
           birthday: userResponseEntity.data?.birthday,
           horoscope: userResponseEntity.data?.horoscope,
           zodiac: userResponseEntity.data?.zodiac,
+          age: 23,
           height: userResponseEntity.data?.height,
           weight: userResponseEntity.data?.weight,
           interests: userResponseEntity.data?.interests,
-        )
+        ),
+        UserState(
+          getUserStatus: GetUserStatus.idle,
+          email: userResponseEntity.data?.email,
+          username: userResponseEntity.data?.username,
+          name: userResponseEntity.data?.name,
+          birthday: userResponseEntity.data?.birthday,
+          horoscope: userResponseEntity.data?.horoscope,
+          zodiac: userResponseEntity.data?.zodiac,
+          age: 23,
+          height: userResponseEntity.data?.height,
+          weight: userResponseEntity.data?.weight,
+          interests: userResponseEntity.data?.interests,
+        ),
       ],
     );
 
@@ -99,18 +113,8 @@ void main() {
       },
       expect: () => <UserState>[
         const UserState(putUserStatus: PutUserStatus.submitting),
-        UserState(
-          putUserStatus: PutUserStatus.done,
-          email: userResponseEntity.data?.email,
-          username: userResponseEntity.data?.username,
-          name: userResponseEntity.data?.name,
-          birthday: userResponseEntity.data?.birthday,
-          horoscope: userResponseEntity.data?.horoscope,
-          zodiac: userResponseEntity.data?.zodiac,
-          height: userResponseEntity.data?.height,
-          weight: userResponseEntity.data?.weight,
-          interests: userResponseEntity.data?.interests,
-        )
+        const UserState(putUserStatus: PutUserStatus.done),
+        const UserState(putUserStatus: PutUserStatus.idle)
       ],
     );
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:youapp_challenge/core/widgets/chip.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
-import 'package:youapp_challenge/features/user/presentation/widgets/edit_button.dart';
 
 class UserHeader extends StatefulWidget {
   const UserHeader({super.key});
@@ -26,20 +26,38 @@ class _UserHeaderState extends State<UserHeader> {
           ),
           child: Stack(
             children: [
-              const Align(
-                alignment: Alignment.topRight,
-                child: EditButton()
-              ),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Visibility(
-                  visible: state.getUserStatus == GetUserStatus.done,
-                  child: Text(
-                    "@${state.username},",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700
-                    ),
+                  visible: state.username != null,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "@${state.username}, ${state.age}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Visibility(
+                            visible: state.horoscope!.isNotEmpty,
+                            child: CustomChip(child: Text(state.horoscope!)),
+                          ),
+                          Visibility(
+                            visible: state.zodiac!.isNotEmpty,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: CustomChip(child: Text(state.zodiac!)),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 )
               ),

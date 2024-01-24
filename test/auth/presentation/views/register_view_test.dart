@@ -100,40 +100,4 @@ void main() {
 
     });
   });
-
-  testWidgets('TextFormField test', (WidgetTester tester) async {
-    // Define the key.
-    final key = GlobalKey<FormState>();
-
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Form(
-          key: key,
-          child: TextFormField(
-            validator: (value) {
-              if (value?.isEmpty ?? false) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-        ),
-      ),
-    ));
-
-    // Interact with the text field and enter text.
-    await tester.enterText(find.byType(TextFormField), 'Hello Flutter');
-
-    // Trigger a frame.
-    await tester.pump();
-
-    // Check if the TextFormField shows the entered text.
-    expect(find.text('Hello Flutter'), findsOneWidget);
-
-    // Optionally (if you want to check form validation):
-    // Verify that the form is valid.
-    bool? isValid = key.currentState?.validate();
-    expect(isValid, isTrue); // or isFalse if expecting validation to fail.
-  });
 }
