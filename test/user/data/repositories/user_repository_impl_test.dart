@@ -5,6 +5,7 @@ import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/core/services/dio_service.dart';
 import 'package:youapp_challenge/features/user/data/repositories/user_repository_impl.dart';
 import 'package:youapp_challenge/features/user/data/source/remote_user_source.dart';
+import 'package:youapp_challenge/features/user/domain/entities/form_user_entity.dart';
 import 'package:youapp_challenge/features/user/domain/entities/user_entity.dart';
 
 void main() {
@@ -45,6 +46,14 @@ void main() {
       }
     };
 
+    final formUser = FormUserEntity(
+      name: response["data"]["name"],
+      birthday: response["data"]["birthday"],
+      height: response["data"]["height"],
+      weight: response["data"]["weight"],
+      interests: response["data"]["interests"]
+    );
+
     test('when get user is success should return data success', () async {
       // arrange
       dioAdapter.onGet('/getProfile', (server) {
@@ -66,6 +75,41 @@ void main() {
 
       // act
       final result = await userRepo.getUser();
+
+      expect(result, isA<DataFailed<UserResponseEntity>>());
+    });
+
+    test('when put user is success should return data success', () async {
+      // arrange
+      dioAdapter.onPut(
+        '/updateProfile',
+        data: {
+          "name": response["name"],
+          "birthday": response["birthday"],
+          "height": response["height"],
+          "weight": response["weight"],
+          "interests": response["interests"]
+        },
+        (server) {
+          return server.reply(200, response);
+        }
+      );
+
+      // act
+      final result = await userRepo.putUser(formUser);
+
+      expect(result, isA<DataSuccess<UserResponseEntity>>());
+      expect(result.data?.data, isNotNull);
+    });
+
+    test('when put user is failed should return data failed', () async {
+      // arrange
+      dioAdapter.onPut('/updateProfile', data: {}, (server) {
+        return server.reply(400, {});
+      });
+
+      // act
+      final result = await userRepo.putUser(formUser);
 
       expect(result, isA<DataFailed<UserResponseEntity>>());
     });

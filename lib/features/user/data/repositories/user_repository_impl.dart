@@ -22,9 +22,14 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<DataState<UserResponseEntity>> putUser(FormUserEntity form) {
-    // TODO: implement putUser
-    throw UnimplementedError();
+  Future<DataState<UserResponseEntity>> putUser(FormUserEntity form) async {
+    try {
+      final response = await _userSource.putUser(form);
+
+      return DataSuccess(response.data);
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
   }
   
 }
