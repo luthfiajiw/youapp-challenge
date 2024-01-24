@@ -40,7 +40,7 @@ class _UserInterestState extends State<UserInterest> {
                   EditButton()
                 ],
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 16,),
               Visibility(
                 visible: state.interests!.isNotEmpty,
                 replacement: const Text(

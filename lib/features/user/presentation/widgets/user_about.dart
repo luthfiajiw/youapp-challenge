@@ -14,9 +14,15 @@ class UserAbout extends StatefulWidget {
 }
 
 class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-  late final Tween<double> _sizeTween;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late Tween<double> _sizeTween;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController birthdayController = TextEditingController();
+  TextEditingController horoscopeController = TextEditingController();
+  TextEditingController zodiacController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
 
   bool _isExpanded = false;
 
@@ -39,7 +45,16 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
-
+        if (state.getUserStatus == GetUserStatus.done) {
+          setState(() {
+            nameController.text = state.name!;
+            birthdayController.text = state.birthday!;
+            horoscopeController.text = state.horoscope!;
+            zodiacController.text = state.zodiac!;
+            heightController.text = state.height!.toString();
+            weightController.text = state.weight!.toString();
+          });
+        }
       },
       builder: (context, state) {
         return Container(
@@ -95,14 +110,48 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                   )
                 ],
               ),
-              SizedBox(height: _isExpanded ? 22 : 20,),
+              SizedBox(height: _isExpanded ? 18 : 16,),
               SizeTransition(
                 sizeFactor: _sizeTween.animate(_animation),
                 child: Column(
                   children: [
                     _buildUploadBtn(),
                     const SizedBox(height: 24,),
-                    ..._buildFormAbout(state)
+                    _buildTextfield(
+                      label: "Display Name:",
+                      hintText: "Enter Name",
+                      controller: nameController
+                    ),
+                    _buildTextfield(
+                      label: "Birthday:",
+                      hintText: "DD MM YYYY",
+                      controller: birthdayController,
+                      readOnly: true
+                    ),
+                    _buildTextfield(
+                      label: "Horoscope:",
+                      hintText: "--",
+                      controller: horoscopeController,
+                      disabled: true,
+                      readOnly: true,
+                    ),
+                    _buildTextfield(
+                      label: "Zodiac:",
+                      hintText: "--",
+                      controller: zodiacController,
+                      disabled: true,
+                      readOnly: true
+                    ),
+                    _buildTextfield(
+                      label: "Height:",
+                      hintText: "0",
+                      controller: heightController
+                    ),
+                    _buildTextfield(
+                      label: "Weight:",
+                      hintText: "0",
+                      controller: weightController
+                    ),
                   ],
                 ),
               ),
@@ -134,36 +183,6 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
   }
 }
 
-List<Widget> _buildFormAbout(UserState state) {
-  return [
-    _buildTextfield(
-      label: "Display Name:",
-      hintText: "Enter Name",
-      initValue: state.name
-    ),
-    _buildTextfield(
-      label: "Birthday:",
-      hintText: "DD MM YYYY"
-    ),
-    _buildTextfield(
-      label: "Horoscope:",
-      hintText: "--"
-    ),
-    _buildTextfield(
-      label: "Zodiac:",
-      hintText: "--"
-    ),
-    _buildTextfield(
-      label: "Height:",
-      hintText: "0"
-    ),
-    _buildTextfield(
-      label: "Weight:",
-      hintText: "0"
-    ),
-  ];
-}
-
 Widget _buildField({
   required String label,
   dynamic value
@@ -191,7 +210,9 @@ Widget _buildField({
 Widget _buildTextfield({
   required String label,
   String? hintText,
-  String? initValue
+  TextEditingController? controller,
+  bool? readOnly = false,
+  bool? disabled = false,
 }) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 16.0, right: 8),
@@ -204,12 +225,16 @@ Widget _buildTextfield({
             style: const TextStyle(color: Colors.white60),
           )
         ),
-        const SizedBox(width: 32,),
+        const SizedBox(width: 24,),
         Expanded(
           child: TextFormField(
             key: Key(label),
+            readOnly: readOnly!,
             textAlign: TextAlign.right,
-            initialValue: initValue,
+            style: TextStyle(
+              color: disabled! ? Colors.white24 : Colors.white
+            ),
+            controller: controller,
             decoration: InputDecoration(
               hintText: hintText,
               enabledBorder: OutlineInputBorder(
@@ -220,7 +245,7 @@ Widget _buildTextfield({
                 borderRadius: BorderRadius.circular(9),
                 borderSide: const BorderSide(width: 1, color: Colors.white24)
               ),
-              contentPadding: const EdgeInsets.fromLTRB(0, 6, 16, 6)
+              contentPadding: const EdgeInsets.only(right: 16)
             ),
           ),
         ),
