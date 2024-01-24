@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/features/user/data/source/remote_user_source.dart';
+import 'package:youapp_challenge/features/user/domain/entities/form_user_entity.dart';
 import 'package:youapp_challenge/features/user/domain/entities/user_entity.dart';
 import 'package:youapp_challenge/features/user/domain/repositories/user_repository.dart';
 
@@ -18,6 +19,12 @@ class UserRepositoryImpl extends UserRepository {
     } on DioException catch (e) {
       return DataFailed(e);
     }
+  }
+
+  @override
+  Future<DataState<UserResponseEntity>> putUser(FormUserEntity form) {
+    // TODO: implement putUser
+    throw UnimplementedError();
   }
   
 }

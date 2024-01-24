@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:youapp_challenge/core/resources/data_state.dart';
@@ -26,6 +27,17 @@ void main() {
       final response = await usecase();
 
       expect(response, isA<DataSuccess<UserResponseEntity>>());
+    });
+
+    test('when get user failed should return data failed', () async {
+      // arrange
+      when(() => mockUserRepository.getUser())
+        .thenAnswer((_) async => DataFailed(DioException(requestOptions: RequestOptions())));
+      
+      // act
+      final response = await usecase();
+
+      expect(response, isA<DataFailed<UserResponseEntity>>());
     });
   });
 }
