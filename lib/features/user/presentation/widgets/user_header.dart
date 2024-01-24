@@ -29,13 +29,14 @@ class _UserHeaderState extends State<UserHeader> {
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Visibility(
-                  visible: state.username != null,
+                  visible: state.username!.isNotEmpty,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "@${state.username}, ${state.age}",
+                        key: const Key("username"),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700
@@ -46,13 +47,19 @@ class _UserHeaderState extends State<UserHeader> {
                         children: [
                           Visibility(
                             visible: state.horoscope!.isNotEmpty,
-                            child: CustomChip(child: Text(state.horoscope!)),
+                            child: CustomChip(
+                              key: const Key("horo-chip"),
+                              child: Text(state.horoscope!)
+                            ),
                           ),
                           Visibility(
                             visible: state.zodiac!.isNotEmpty,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: CustomChip(child: Text(state.zodiac!)),
+                              child: CustomChip(
+                                key: const Key("zod-chip"),
+                                child: Text(state.zodiac!)
+                              ),
                             ),
                           ),
                         ],
