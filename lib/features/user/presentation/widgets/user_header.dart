@@ -21,7 +21,7 @@ class _UserHeaderState extends State<UserHeader> {
           padding: const EdgeInsets.fromLTRB(20, 8, 14, 20),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(.15),
+            color: Colors.white.withOpacity(.125),
             borderRadius: BorderRadius.circular(16)
           ),
           child: Stack(

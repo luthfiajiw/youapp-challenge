@@ -25,7 +25,7 @@ void main() {
     );
   }
 
-  group('User Header', () {
+  group('User Header Widget', () {
     // finders
     final usernameTextFinder = find.byKey(const Key("username"));
     final horoscopeChipFinder = find.byKey(const Key("horo-chip"));

@@ -35,6 +35,10 @@ class _UserViewState extends State<UserView> {
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: customAppbar(
+          onBack: () {
+            context.read<SplashCubit>().clearAccessToken();
+            Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
+          },
           title: BlocConsumer<UserCubit, UserState>(
             listenWhen: (previous, current) {
               return previous.getUserStatus != current.getUserStatus;
@@ -58,19 +62,6 @@ class _UserViewState extends State<UserView> {
               );
             },
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<SplashCubit>().clearAccessToken();
-                Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
-              },
-              icon: const GradientIcon(
-                icon: Icon(
-                  Icons.logout_rounded,
-                ),
-              )
-            )
-          ]
         ),
         body: ListView(
           children: const [

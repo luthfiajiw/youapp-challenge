@@ -161,6 +161,7 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
               SizeTransition(
                 sizeFactor: _sizeTween.animate(_animation),
                 child: Column(
+                  key: const Key("form-about"),
                   children: [
                     _buildUploadBtn(),
                     const SizedBox(height: 24,),
@@ -206,13 +207,14 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                 ),
               ),
               Visibility(
-                visible: !_isExpanded && state.email != "--",
+                visible: !_isExpanded && state.email!.isNotEmpty,
                 child: Column(
+                  key: const Key("section-about"),
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildField(
                       label: "Birthday:",
-                      value:state.birthday!.isEmpty ? "--" : "${DateFormat("dd / MM / yyyy").format(DateTime.parse(state.birthday!))} (Age ${state.age})"
+                      value: state.birthday!.isEmpty ? "--" : "${DateFormat("dd / MM / yyyy").format(DateTime.parse(state.birthday!))} (Age ${state.age})"
                     ),
                     _buildField(label: "Horoscope:", value: state.horoscope),
                     _buildField(label: "Zodiac:", value: state.zodiac),
@@ -222,9 +224,10 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                 ),
               ),
               Visibility(
-                visible: state.getUserStatus == GetUserStatus.loading && state.email == "--",
+                visible: state.email!.isEmpty,
                 child: const Text(
                   "Add in yours to help others know you\nbetter",
+                  key: Key("initial-about"),
                   style: TextStyle(color: Colors.white60),
                 ),
               )
@@ -238,9 +241,11 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
 
 Widget _buildField({
   required String label,
+  Key? key,
   dynamic value
 }) {
   return Padding(
+    key: key,
     padding: const EdgeInsets.only(bottom: 14.0),
     child: Row(
       children: [
