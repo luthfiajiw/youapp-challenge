@@ -10,6 +10,7 @@ class AuthState extends Equatable{
   final String? username;
   final String? password;
   final String? confirmPassword;
+  final String? errorMessage;
   final bool? showPassword;
   final bool? showConfirmPassword;
   final AuthSubmissionStatus? authStatus;
@@ -20,6 +21,7 @@ class AuthState extends Equatable{
     this.username,
     this.password,
     this.confirmPassword,
+    this.errorMessage,
     this.showPassword = false,
     this.showConfirmPassword = false,
     this.authStatus = AuthSubmissionStatus.idle,
@@ -31,6 +33,7 @@ class AuthState extends Equatable{
     String? username,
     String? password,
     String? confirmPassword,
+    String? errorMessage,
     bool? showPassword,
     bool? showConfirmPassword,
     AuthSubmissionStatus? authStatus,
@@ -41,6 +44,7 @@ class AuthState extends Equatable{
       username: username ?? this.username,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
+      errorMessage: errorMessage ?? this.errorMessage,
       showPassword: showPassword ?? this.showPassword,
       showConfirmPassword: showConfirmPassword ?? this.showConfirmPassword,
       authStatus: authStatus ?? this.authStatus,
@@ -50,7 +54,7 @@ class AuthState extends Equatable{
   
   @override
   List<Object?> get props => [
-    email, username, password, confirmPassword, showPassword,
+    email, username, password, confirmPassword, errorMessage, showPassword,
     showConfirmPassword, authStatus, confirmPasswordAutovalidate
   ];
 }

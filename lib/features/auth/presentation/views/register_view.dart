@@ -8,6 +8,7 @@ import 'package:youapp_challenge/core/widgets/gradient_background.dart';
 import 'package:youapp_challenge/core/widgets/gradient_button.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
+import 'package:youapp_challenge/core/widgets/snackbar_toast.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_event.dart';
 import 'package:youapp_challenge/features/auth/presentation/bloc/auth_state.dart';
@@ -37,12 +38,16 @@ class RegisterView extends StatelessWidget with FormValidatorMixin {
         body: BlocProvider(
           create: (context) => authBloc,
           child: BlocConsumer<AuthBloc, AuthState>(
+            listenWhen: (previous, current) {
+              return previous.authStatus != current.authStatus;
+            },
             listener: (context, state) {
               if (state.authStatus == AuthSubmissionStatus.done) {
                 Navigator.pop(context);
-              }
-              if (state.authStatus == AuthSubmissionStatus.error) {
-                // Handle Snackbar Error Here
+              } else if (state.authStatus == AuthSubmissionStatus.error && state.errorMessage != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  errorSnackbar(context, message: state.errorMessage!)
+                );
               }
             },
             builder: (context, state) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/core/widgets/custom_appbar.dart';
-import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/screen_loading.dart';
 import 'package:youapp_challenge/features/auth/presentation/cubit/splash_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';

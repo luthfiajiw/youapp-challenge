@@ -69,7 +69,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         sharedPrefs.setAccessToken(response.data!.accessToken!);
         emit(state.copyWith(authStatus: AuthSubmissionStatus.done));
       } else if (response is DataFailed) {
-        emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
+        emit(state.copyWith(
+          authStatus: AuthSubmissionStatus.error,
+          errorMessage: response.exception?.response?.data["message"]
+        ));
       }
     } catch (e) {
       rethrow;
@@ -86,7 +89,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (response is DataSuccess && response.data != null) {
         emit(state.copyWith(authStatus: AuthSubmissionStatus.done));
       } else if (response is DataFailed) {
-        emit(state.copyWith(authStatus: AuthSubmissionStatus.error));
+        emit(state.copyWith(
+          authStatus: AuthSubmissionStatus.error,
+          errorMessage: response.exception?.response?.data["message"]
+        ));
       }
     } catch (e) {
       rethrow;
