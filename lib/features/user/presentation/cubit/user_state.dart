@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
 
 enum GetUserStatus {
   idle, loading, done, error
@@ -11,6 +12,7 @@ enum PutUserStatus {
 class UserState extends Equatable {
   final GetUserStatus? getUserStatus;
   final PutUserStatus? putUserStatus;
+  final XFile? image;
   final String? email;
   final String? username;
   final String? name;
@@ -25,6 +27,7 @@ class UserState extends Equatable {
   const UserState({
     this.getUserStatus = GetUserStatus.idle,
     this.putUserStatus = PutUserStatus.idle,
+    this.image,
     this.email = "",
     this.username = "",
     this.name = "",
@@ -40,6 +43,7 @@ class UserState extends Equatable {
   UserState copyWith({
     GetUserStatus? getUserStatus,
     PutUserStatus? putUserStatus,
+    XFile? image,
     String? email,
     String? username,
     String? name,
@@ -54,6 +58,7 @@ class UserState extends Equatable {
     return UserState(
       getUserStatus: getUserStatus ?? this.getUserStatus,
       putUserStatus: putUserStatus ?? this.putUserStatus,
+      image: image ?? this.image,
       email: email ?? this.email,
       username: username ?? this.username,
       name: name ?? this.name,
@@ -69,7 +74,7 @@ class UserState extends Equatable {
   
   @override
   List<Object?> get props => [
-    getUserStatus, putUserStatus, email, username, name, birthday,
-    horoscope, zodiac, age, height, weight, interests
+    getUserStatus, putUserStatus, image, email, username, name,
+    birthday, horoscope, zodiac, age, height, weight, interests
   ];
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:youapp_challenge/core/resources/data_state.dart';
 import 'package:youapp_challenge/features/user/domain/entities/form_user_entity.dart';
 import 'package:youapp_challenge/features/user/domain/entities/user_entity.dart';
@@ -77,5 +78,9 @@ class UserCubit extends Cubit<UserState> {
 
   void onChangeInterest(List interests) {
     emit(state.copyWith(interests: interests));
+  }
+
+  void onChangeImage(XFile image) {
+    emit(state.copyWith(image: image));
   }
 }

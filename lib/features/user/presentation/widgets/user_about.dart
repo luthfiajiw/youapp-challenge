@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:youapp_challenge/core/widgets/gradient_icon.dart';
 import 'package:youapp_challenge/core/widgets/gradient_text.dart';
@@ -57,6 +60,16 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
     FocusScope.of(context).unfocus();
     showScreenLoading(context);
     context.read<UserCubit>().onPutUser(form);
+  }
+
+  void pickImage() {
+    final ImagePicker picker = ImagePicker();
+    picker.pickImage(source: ImageSource.gallery)
+      .then((image) {
+        if (image != null) {
+          context.read<UserCubit>().onChangeImage(image);
+        }
+      });
   }
 
   Future<void> pickDate(BuildContext context, String birthday) async {
@@ -163,7 +176,10 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                 child: Column(
                   key: const Key("form-about"),
                   children: [
-                    _buildUploadBtn(),
+                    _buildUploadBtn(
+                      image: state.image,
+                      onTap: pickImage
+                    ),
                     const SizedBox(height: 24,),
                     AboutTextField(
                       label: "Display Name:",
@@ -270,18 +286,25 @@ Widget _buildField({
   );
 }
 
-Widget _buildUploadBtn() {
+Widget _buildUploadBtn({
+  VoidCallback? onTap,
+  XFile? image
+}) {
   return Row(
     children: [
       InkWell(
         key: const Key("btn-upload"),
-        onTap: () {},
+        onTap:onTap,
         borderRadius: BorderRadius.circular(22),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(.1),
-            borderRadius: BorderRadius.circular(22)
+            borderRadius: BorderRadius.circular(22),
+            image: image == null ? null : DecorationImage(
+              image: FileImage(File(image.path)),
+              fit: BoxFit.cover
+            )
           ),
           child: const GradientIcon(
             icon: Icon(Icons.add_rounded, size: 40,),
