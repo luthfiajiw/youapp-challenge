@@ -15,6 +15,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  final messangerKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -28,6 +30,7 @@ class _AppState extends State<App> {
       ],
       child: MaterialApp(
         title: "IndRecord",
+        scaffoldMessengerKey: messangerKey,
         debugShowCheckedModeBanner: false,
         theme: DarkTheme().buildDarkTheme(),
         initialRoute: RoutePaths.splash,
