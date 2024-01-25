@@ -6,6 +6,7 @@ import 'package:youapp_challenge/features/auth/presentation/bloc/auth_bloc.dart'
 import 'package:youapp_challenge/features/auth/presentation/views/login_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/register_view.dart';
 import 'package:youapp_challenge/features/auth/presentation/views/splash_view.dart';
+import 'package:youapp_challenge/features/user/presentation/views/interests_view.dart';
 import 'package:youapp_challenge/features/user/presentation/views/user_view.dart';
 
 class Routes {
@@ -35,6 +36,11 @@ class Routes {
         return CupertinoPageRoute(
           settings: const RouteSettings(name: RoutePaths.user),
           builder: (context) => const UserView(),
+        );
+      case RoutePaths.interests:
+        return CupertinoPageRoute(
+          settings: const RouteSettings(name: RoutePaths.interests),
+          builder: (context) => const InterestsView(),
         );
       default:
         break;

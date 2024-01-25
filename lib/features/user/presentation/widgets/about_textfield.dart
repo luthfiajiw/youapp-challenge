@@ -7,6 +7,8 @@ class AboutTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool? readOnly;
   final bool? disabled;
+  final Widget? suffix;
+  final TextInputType? keyboardType;
 
   const AboutTextField({
     super.key,
@@ -15,7 +17,9 @@ class AboutTextField extends StatelessWidget {
     this.controller,
     this.onTap,
     this.readOnly = false,
-    this.disabled = false
+    this.disabled = false,
+    this.suffix,
+    this.keyboardType
   });
 
   @override
@@ -38,6 +42,7 @@ class AboutTextField extends StatelessWidget {
               onTap: onTap,
               readOnly: readOnly!,
               textAlign: TextAlign.right,
+              keyboardType: keyboardType,
               style: TextStyle(
                 color: disabled! ? Colors.white24 : Colors.white
               ),
@@ -52,7 +57,8 @@ class AboutTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(9),
                   borderSide: const BorderSide(width: 1, color: Colors.white24)
                 ),
-                contentPadding: const EdgeInsets.only(right: 16)
+                contentPadding: const EdgeInsets.only(right: 16),
+                suffix: suffix
               ),
             ),
           ),

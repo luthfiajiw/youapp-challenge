@@ -16,5 +16,7 @@ class Palette {
   // Blue Gradient
   static Color blue1 = const Color(0xFF62cdcb);
   static Color blue2 = const Color(0xFF4599db);
+  static Color blue3 = const Color(0xFFABFFFD);
+  static Color blue4 = const Color(0xFFAADAFF);
   
 }

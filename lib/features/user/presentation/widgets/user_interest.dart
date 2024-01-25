@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:youapp_challenge/config/routes/route_pahts.dart';
 import 'package:youapp_challenge/core/widgets/chip.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_cubit.dart';
 import 'package:youapp_challenge/features/user/presentation/cubit/user_state.dart';
@@ -28,17 +29,19 @@ class _UserInterestState extends State<UserInterest> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Interest",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700
                     ),
                   ),
-                  EditButton()
+                  EditButton(
+                    onTap: () => Navigator.pushNamed(context, RoutePaths.interests),
+                  )
                 ],
               ),
               const SizedBox(height: 16,),
@@ -55,7 +58,9 @@ class _UserInterestState extends State<UserInterest> {
                     String interest = state.interests![index];
 
                     return CustomChip(
-                      child: Text(interest),
+                      child: Text(
+                        interest,
+                      ),
                     );
                   }),
                 ),

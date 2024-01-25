@@ -27,6 +27,11 @@ class _UserViewState extends State<UserView> {
     super.initState();
   }
 
+  void logout() {
+    context.read<SplashCubit>().clearAccessToken();
+    Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -35,8 +40,7 @@ class _UserViewState extends State<UserView> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: customAppbar(
           onBack: () {
-            context.read<SplashCubit>().clearAccessToken();
-            Navigator.pushNamedAndRemoveUntil(context, RoutePaths.login, (route) => false);
+            logout();
           },
           title: BlocConsumer<UserCubit, UserState>(
             listenWhen: (previous, current) {
@@ -46,6 +50,8 @@ class _UserViewState extends State<UserView> {
               if (state.getUserStatus == GetUserStatus.done) {
                 // dismiss screen loading
                 Navigator.pop(context);
+              } else if (state.getUserStatus == GetUserStatus.error) {
+                logout();
               }
             },
             builder: (context, state) {

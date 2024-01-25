@@ -196,12 +196,22 @@ class _UserAboutState extends State<UserAbout> with SingleTickerProviderStateMix
                     AboutTextField(
                       label: "Height:",
                       hintText: "0",
-                      controller: heightController
+                      controller: heightController,
+                      keyboardType: TextInputType.number,
+                      suffix: const Text(
+                        "cm",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                     AboutTextField(
                       label: "Weight:",
                       hintText: "0",
-                      controller: weightController
+                      controller: weightController,
+                      keyboardType: TextInputType.number,
+                      suffix: const Text(
+                        "kg",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),

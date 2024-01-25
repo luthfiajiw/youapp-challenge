@@ -75,15 +75,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> setGetStatusToIdle() async {
-    emit(state.copyWith(
-      getUserStatus: GetUserStatus.idle,
-    ));
-  }
-
-  Future<void> setPutStatusToIdle() async {
-    emit(state.copyWith(
-      putUserStatus: PutUserStatus.idle,
-    ));
+  void onChangeInterest(List interests) {
+    emit(state.copyWith(interests: interests));
   }
 }

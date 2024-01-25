@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 
 class CustomChip extends StatelessWidget {
+  final double? borderRadius;
+  final VoidCallback? onRemove;
   final Widget child;
 
-  const CustomChip({super.key, required this.child});
+  const CustomChip({
+    super.key,
+    required this.child,
+    this.onRemove,
+    this.borderRadius = 24
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.fromLTRB(20, 10, onRemove == null ? 20 : 12, 10),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.05),
-        borderRadius: BorderRadius.circular(24)
+        borderRadius: BorderRadius.circular(borderRadius!)
       ),
-      child: child,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          child,
+          Visibility(
+            visible: onRemove != null,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: InkWell(
+                onTap: onRemove,
+                child: const Icon(
+                  Icons.close,
+                  size: 16,
+                )
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
