@@ -39,6 +39,7 @@ class _InterestsViewState extends State<InterestsView> {
                   Padding(
                     padding: const EdgeInsets.only(right: 12.0),
                     child: InkWell(
+                      key: const Key("btn-save-interests"),
                       onTap: () {
                         final form = FormUserEntity(
                           name: state.name!,
@@ -109,6 +110,7 @@ class _InterestsViewState extends State<InterestsView> {
                               String interest = state.interests![index];
                               
                               return CustomChip(
+                                key: Key(interest),
                                 borderRadius: 9,
                                 onRemove: () {
                                   final updated = state.interests!.where((element) => element != interest).toList();
@@ -124,6 +126,7 @@ class _InterestsViewState extends State<InterestsView> {
                                 maxWidth: MediaQuery.of(context).size.width * .3
                               ),
                               child: TextFormField(
+                                key: const Key("tf-interest"),
                                 focusNode: focusNode,
                                 controller: textController,
                                 decoration: const InputDecoration(

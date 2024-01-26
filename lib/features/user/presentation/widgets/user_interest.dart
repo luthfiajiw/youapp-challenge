@@ -49,6 +49,7 @@ class _UserInterestState extends State<UserInterest> {
                 visible: state.interests!.isNotEmpty,
                 replacement: const Text(
                   "Add in your interest to find a better match",
+                  key: Key("initial-interest"),
                   style: TextStyle(color: Colors.white60),
                 ),
                 child: Wrap(
@@ -58,6 +59,7 @@ class _UserInterestState extends State<UserInterest> {
                     String interest = state.interests![index];
 
                     return CustomChip(
+                      key: Key(interest),
                       child: Text(
                         interest,
                       ),
