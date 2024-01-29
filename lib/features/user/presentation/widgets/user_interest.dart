@@ -40,6 +40,7 @@ class _UserInterestState extends State<UserInterest> {
                     ),
                   ),
                   EditButton(
+                    key: const Key("btn-edit-interest"),
                     onTap: () => Navigator.pushNamed(context, RoutePaths.interests),
                   )
                 ],
