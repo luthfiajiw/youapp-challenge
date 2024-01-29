@@ -68,22 +68,28 @@ class _UserViewState extends State<UserView> {
             },
           ),
         ),
-        body: ListView(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: UserHeader(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: UserAbout()
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: UserInterest(),
-            ),
-            SizedBox(height: 20,)
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            showScreenLoading(context);
+            context.read<UserCubit>().onGetUser();
+          },
+          child: ListView(
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: UserHeader(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: UserAbout()
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: UserInterest(),
+              ),
+              SizedBox(height: 20,)
+            ],
+          ),
         ),
       ),
     );
