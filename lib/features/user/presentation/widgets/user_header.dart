@@ -17,6 +17,8 @@ class UserHeader extends StatefulWidget {
 class _UserHeaderState extends State<UserHeader> {
   @override
   Widget build(BuildContext context) {
+    const bool kIsWeb = bool.fromEnvironment('dart.library.js_util');
+
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, state) {
         return Container(
@@ -25,8 +27,10 @@ class _UserHeaderState extends State<UserHeader> {
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(.125),
             borderRadius: BorderRadius.circular(16),
-            image: state.image == null ? null : DecorationImage(
-              image: FileImage(File(state.image!.path)),
+            image: state.image == null 
+            ? null 
+            : DecorationImage(
+              image: kIsWeb ? NetworkImage(state.image!.path) as ImageProvider : FileImage(File(state.image!.path)),
               fit: BoxFit.cover
             )
           ),
